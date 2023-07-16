@@ -1,46 +1,46 @@
-import '../globals.css'
-import { Inter } from 'next/font/google'
-import { BsQrCodeScan } from 'react-icons/bs'
-import Link from 'next/link'
+import "../globals.css";
+import { Inter } from "next/font/google";
+import { BsQrCodeScan } from "react-icons/bs";
+import Link from "next/link";
 
-const inter = Inter({ subsets: ['latin'] })
+const inter = Inter({ subsets: ["latin"] });
 
 type Module = {
-  id: number
-  name: string
-  route: string
-}
+  id: number;
+  name: string;
+  route: string;
+};
 
 interface ModuleObject {
-  [index: string]: Module
+  [index: string]: Module;
 }
 
 const modules: ModuleObject = {
-  "index":  {
+  index: {
     id: 0,
     name: "Dashboard",
     route: "/",
   },
-  "events": {
+  events: {
     id: 1,
     name: "Events",
     route: "/events",
   },
-}
+};
 
 export default function RootLayout({
   children,
 }: {
-  children: React.ReactNode
+  children: React.ReactNode;
 }) {
   return (
     <html lang="en">
       <body className={inter.className}>
-        <div className="grid grid-cols-6 grid-rows-6 h-screen text-neutral-500">
+        <div className="grid h-screen grid-cols-6 grid-rows-6 text-neutral-500">
           <div className="col-span-1 row-span-6 bg-white">
-            <div className="overflow-y-auto mt-5 flex justify-center text-center">
+            <div className="mt-5 flex justify-center overflow-y-auto text-center">
               <Link href="/">
-                <BsQrCodeScan size="98"/> 
+                <BsQrCodeScan size="98" />
                 <p className="py-3">Ticketify</p>
               </Link>
             </div>
@@ -53,5 +53,5 @@ export default function RootLayout({
         </div>
       </body>
     </html>
-  )
+  );
 }
