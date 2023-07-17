@@ -1,3 +1,11 @@
-from django.shortcuts import render
+from rest_framework.views import APIView
 
-# Create your views here.
+
+class LoginUser(APIView):
+    """
+    Logs a user in.
+    """
+    authentication_classes = []
+
+    def post(self, request, format=None):
+        pass
