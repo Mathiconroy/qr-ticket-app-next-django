@@ -15,7 +15,7 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.contrib import admin
-from django.urls import path
+from django.urls import path, include
 from django.contrib.auth.models import User, Group
 from rest_framework import generics, permissions, serializers
 
@@ -58,4 +58,5 @@ urlpatterns = [
     path('users/', UserList.as_view()),
     path('users/<pk>/', UserDetails.as_view()),
     path('groups/', GroupList.as_view()),
+    path('app/', include('qr_tickets.urls')),
 ]

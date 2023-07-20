@@ -1,16 +1,21 @@
+'use client'
+
+import { FormEvent } from "react";
+
 export default function Home() {
   return (
     <div className="grid h-screen grid-cols-1 place-items-center bg-neutral-900">
       <div className="w-1/3 rounded-lg border border-zinc-800 bg-zinc-800 p-5">
         <p className="text-xl">Log In</p>
-        <form>
+        <form id="loginForm" onSubmit={(e) => handleLogin(e)}>
           <label htmlFor="username" className="block py-2">
             Username
           </label>
           <input
             type="text"
             id="username"
-            className="block w-full rounded-lg bg-zinc-700 py-2"
+            name="username"
+            className="block w-full rounded-lg bg-zinc-700 p-2"
           />
           <label htmlFor="password" className="block py-2">
             Password
@@ -18,7 +23,8 @@ export default function Home() {
           <input
             type="password"
             id="password"
-            className="block w-full rounded-lg bg-zinc-700 py-2"
+            name="password"
+            className="block w-full rounded-lg bg-zinc-700 p-2"
           />
           <button
             type="submit"
@@ -31,4 +37,13 @@ export default function Home() {
       </div>
     </div>
   );
+}
+
+function handleLogin(e: FormEvent) {
+  const form = document.querySelector("#loginForm") as HTMLFormElement;
+  const formData = new FormData(form);
+  fetch("http://127.0.0.1:8000/app/login/", {
+    method: "POST",
+    body: formData,
+  });
 }
