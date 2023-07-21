@@ -39,11 +39,13 @@ export default function Home() {
   );
 }
 
-function handleLogin(e: FormEvent) {
+async function handleLogin(e: FormEvent) {
+  e.preventDefault();
   const form = document.querySelector("#loginForm") as HTMLFormElement;
   const formData = new FormData(form);
-  fetch("http://127.0.0.1:8000/app/login/", {
+  const res = await fetch("http://127.0.0.1:8000/app/login/", {
     method: "POST",
     body: formData,
   });
+  console.log(res);
 }
