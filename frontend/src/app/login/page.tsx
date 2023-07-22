@@ -34,6 +34,13 @@ export default function Home() {
           </button>
           <p className="pt-3 text-center">New to Ticketify? Sign up.</p>
         </form>
+        <button
+          onClick={handleWhoAmI}
+          type="submit"
+          className="mt-5 w-full rounded-md bg-sky-700 p-2"
+        >
+          Who am I?
+        </button>
       </div>
     </div>
   );
@@ -46,6 +53,20 @@ async function handleLogin(e: FormEvent) {
   const res = await fetch("http://127.0.0.1:8000/app/login/", {
     method: "POST",
     body: formData,
+    credentials: "include",
+    headers: {
+      "X-CSRFToken": "XD",
+    },
   });
-  console.log(res);
+  console.log(res.json());
+}
+
+async function handleWhoAmI() {
+  const res = await fetch("http://127.0.0.1:8000/app/whoami/", {
+    credentials: "include",
+    headers: {
+      "Content-Type": "application/json",
+    }
+  });
+  console.log(res.json());
 }

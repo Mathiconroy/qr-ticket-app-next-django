@@ -11,7 +11,6 @@ class LoginUser(APIView):
     permission_classes = []
 
     def post(self, request, format=None):
-        print(request)
         username = request.POST["username"]
         password = request.POST["password"]
         user = authenticate(request, username=username, password=password)
@@ -21,3 +20,11 @@ class LoginUser(APIView):
         else:
             return Response({"message": "Invalid credentials."})
         return Response(request.data)
+
+
+class WhoAmI(APIView):
+    authentication_classes = []
+    permission_classes = []
+
+    def get(self, request):
+        return Response({"isAuthenticated": request.user.is_authenticated})
