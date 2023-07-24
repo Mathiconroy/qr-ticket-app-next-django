@@ -50,7 +50,7 @@ async function handleLogin(e: FormEvent) {
   e.preventDefault();
   const form = document.querySelector("#loginForm") as HTMLFormElement;
   const formData = new FormData(form);
-  const res = await fetch("http://127.0.0.1:8000/app/api-token-auth/", {
+  const res = await fetch("http://127.0.0.1:8000/api/api-token-auth/", {
     method: "POST",
     body: formData,
     credentials: "include",
@@ -65,7 +65,7 @@ async function handleLogin(e: FormEvent) {
 }
 
 async function handleWhoAmI() {
-  const res = await fetch("http://127.0.0.1:8000/app/whoami/", {
+  const res = await fetch("http://127.0.0.1:8000/api/whoami/", {
     credentials: "include",
     headers: {
       "Authorization": `Token ${localStorage.getItem("token")}`,

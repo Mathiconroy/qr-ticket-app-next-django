@@ -60,5 +60,5 @@ urlpatterns = [
     path('users/', UserList.as_view()),
     path('users/<pk>/', UserDetails.as_view()),
     path('groups/', GroupList.as_view()),
-    path('app/', include('qr_tickets.urls')),
+    path('api/', include('qr_tickets.urls')),
 ]

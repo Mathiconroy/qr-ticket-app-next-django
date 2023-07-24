@@ -2,6 +2,7 @@ import "../globals.css";
 import { Inter } from "next/font/google";
 import { BsQrCodeScan } from "react-icons/bs";
 import Link from "next/link";
+import UserVerificator from "./userVerificator";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -33,9 +34,11 @@ export default function RootLayout({
 }: {
   children: React.ReactNode;
 }) {
+
   return (
     <html lang="en">
       <body className={inter.className}>
+        <UserVerificator />
         <div className="grid h-screen grid-cols-6 grid-rows-6 text-neutral-500">
           <div className="col-span-1 row-span-6 bg-white">
             <div className="mt-5 flex justify-center overflow-y-auto text-center">
