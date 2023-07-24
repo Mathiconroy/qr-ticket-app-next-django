@@ -18,6 +18,8 @@ from django.contrib import admin
 from django.urls import path, include
 from django.contrib.auth.models import User, Group
 from rest_framework import generics, permissions, serializers
+from django.contrib.auth import get_user_model
+
 
 admin.autodiscover()
 
@@ -36,13 +38,13 @@ class GroupSerializer(serializers.ModelSerializer):
 
 class UserList(generics.ListCreateAPIView):
     permission_classes = [permissions.IsAuthenticated]
-    queryset = User.objects.all()
+    queryset = get_user_model().objects.all()
     serializer_class = UserSerializer
 
 
 class UserDetails(generics.RetrieveAPIView):
     permission_classes = [permissions.IsAuthenticated]
-    queryset = User.objects.all()
+    queryset = get_user_model().objects.all()
     serializer_class = UserSerializer
 
 

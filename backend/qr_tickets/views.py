@@ -23,8 +23,8 @@ class LoginUser(APIView):
 
 
 class WhoAmI(APIView):
-    authentication_classes = []
     permission_classes = []
 
     def get(self, request):
+        print(request.META)
         return Response({"isAuthenticated": request.user.is_authenticated})

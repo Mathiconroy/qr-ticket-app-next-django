@@ -50,22 +50,25 @@ async function handleLogin(e: FormEvent) {
   e.preventDefault();
   const form = document.querySelector("#loginForm") as HTMLFormElement;
   const formData = new FormData(form);
-  const res = await fetch("http://127.0.0.1:8000/app/login/", {
+  const res = await fetch("http://127.0.0.1:8000/app/api-token-auth/", {
     method: "POST",
     body: formData,
     credentials: "include",
-    headers: {
-      "X-CSRFToken": "XD",
-    },
   });
-  console.log(res.json());
+  if (res.ok) {
+    let json_response = await res.json();
+    localStorage.setItem("token", json_response["token"]);
+  }
+  else {
+    // TODO: Handle this case lol.
+  }
 }
 
 async function handleWhoAmI() {
   const res = await fetch("http://127.0.0.1:8000/app/whoami/", {
     credentials: "include",
     headers: {
-      "Content-Type": "application/json",
+      "Authorization": `Token ${localStorage.getItem("token")}`,
     }
   });
   console.log(res.json());
