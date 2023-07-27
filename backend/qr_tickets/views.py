@@ -26,5 +26,4 @@ class WhoAmI(APIView):
     permission_classes = []
 
     def get(self, request):
-        print(request.META)
         return Response({"isAuthenticated": request.user.is_authenticated})
