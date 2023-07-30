@@ -12,7 +12,7 @@ interface Module {
   name: string;
   route: string;
   icon: ReactElement;
-};
+}
 
 interface ModuleObject {
   [key: string]: Module;
@@ -23,13 +23,13 @@ const modules: ModuleObject = {
     id: 0,
     name: "Dashboard",
     route: "app/",
-    icon: <BsQrCodeScan size={20} className="inline-block mx-1" />
+    icon: <BsQrCodeScan size={20} className="mx-1 inline-block" />,
   },
   events: {
     id: 1,
     name: "Events",
     route: "events/",
-    icon: <BsCalendarEvent size={20} className="inline-block mx-1" />,
+    icon: <BsCalendarEvent size={20} className="mx-1 inline-block" />,
   },
 };
 
@@ -62,11 +62,7 @@ export default function RootLayout({
   );
 }
 
-function SidebarItem({ 
-  module 
-}: { 
-  module: Module 
-}) {
+function SidebarItem({ module }: { module: Module }) {
   return (
     <Link href={`/app/${module.route}`} className="flex items-center">
       {module.icon}

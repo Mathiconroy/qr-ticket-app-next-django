@@ -1,4 +1,4 @@
-'use client'
+"use client";
 
 import { FormEvent } from "react";
 
@@ -58,8 +58,7 @@ async function handleLogin(e: FormEvent) {
   if (res.ok) {
     let json_response = await res.json();
     localStorage.setItem("token", json_response["token"]);
-  }
-  else {
+  } else {
     // TODO: Handle this case lol.
   }
 }
@@ -68,8 +67,8 @@ async function handleWhoAmI() {
   const res = await fetch("http://127.0.0.1:8000/api/whoami/", {
     credentials: "include",
     headers: {
-      "Authorization": `Token ${localStorage.getItem("token")}`,
-    }
+      Authorization: `Token ${localStorage.getItem("token")}`,
+    },
   });
   console.log(res.json());
 }
