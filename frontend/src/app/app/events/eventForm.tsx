@@ -8,7 +8,7 @@ export default function EventForm() {
       <EventFormInput type="text" id="name" name="Name" isTextarea={false}/>
       <EventFormInput type="text" id="date" name="Date" isTextarea={false}/>
       <EventFormInput id="description" name="Description" isTextarea={true}/>
-      <button className="my-2 rounded-lg bg-blue-500 text-white p-4">Create event</button>
+      <button className="mt-3 rounded-lg bg-blue-500 text-white p-3">Create event</button>
     </form>
   );
 }
