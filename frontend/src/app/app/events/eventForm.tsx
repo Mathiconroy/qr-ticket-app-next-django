@@ -1,6 +1,7 @@
 "use client";
 
 import { FormEvent } from "react";
+import axiosInstance from "@/app/axiosInstance";
 
 export default function EventForm() {
   return (
@@ -35,4 +36,11 @@ function EventFormInput({
 
 function handleEventForm(e: FormEvent) {
   e.preventDefault();
+  axiosInstance.post('events/', {
+    created_by: 1,
+    scheduled_datetime: "2023-08-19T23:23:18Z",
+    description:"My first event :D",
+  }, {
+
+  });
 }
