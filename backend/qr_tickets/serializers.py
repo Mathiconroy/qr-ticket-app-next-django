@@ -12,7 +12,7 @@ class UserSerializer(serializers.Serializer):
 class EventSerializer(serializers.ModelSerializer):
     class Meta:
         model = Event
-        fields = ['id', 'created_by', 'scheduled_datetime', 'description', 'created_at', 'edited_at']
+        fields = ['id', 'created_by', 'name', 'scheduled_datetime', 'description', 'created_at', 'edited_at']
 
 
 class TicketTypeSerializer(serializers.ModelSerializer):
