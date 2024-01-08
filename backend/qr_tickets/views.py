@@ -33,7 +33,10 @@ class WhoAmI(APIView):
     permission_classes = []
 
     def get(self, request):
-        return Response({"isAuthenticated": request.user.is_authenticated})
+        return Response({
+            "username": request.user.username,
+            "isAuthenticated": request.user.is_authenticated,
+        })
 
 
 class EventList(mixins.ListModelMixin, mixins.CreateModelMixin, generics.GenericAPIView):

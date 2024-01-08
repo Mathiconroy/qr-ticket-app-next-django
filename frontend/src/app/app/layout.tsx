@@ -3,6 +3,7 @@ import { Inter } from "next/font/google";
 import { BsQrCodeScan, BsCalendarEvent } from "react-icons/bs";
 import Link from "next/link";
 import UserVerificator from "./userVerificator";
+import UserInfoBanner from "./userInfoBanner";
 import { ReactElement } from "react";
 
 const inter = Inter({ subsets: ["latin"] });
@@ -42,7 +43,7 @@ export default function RootLayout({
     <html lang="en">
       <body className={inter.className}>
         <UserVerificator />
-        <div className="grid h-screen grid-cols-6 grid-rows-6 text-neutral-500">
+        <div className="grid h-screen grid-cols-6 grid-rows-6 text-neutral-500 md:text-lg">
           <div className="col-span-1 row-span-6 bg-white">
             <div className="mt-5 flex justify-center overflow-y-auto text-center">
               <Link href="/app">
@@ -54,7 +55,11 @@ export default function RootLayout({
               <SidebarItem module={modules["events"]} />
             </ul>
           </div>
-          <div className="col-span-5 row-span-1 bg-neutral-100">Dashboard</div>
+          <div className="col-span-5 row-span-1 bg-neutral-100">
+            <div className="p-3 text-right">
+              <UserInfoBanner />
+            </div>
+          </div>
           <div className="col-span-5 row-span-5 bg-neutral-100">{children}</div>
         </div>
       </body>
