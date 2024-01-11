@@ -60,7 +60,11 @@ export default function RootLayout({
               <UserInfoBanner />
             </div>
           </div>
-          <div className="col-span-5 row-span-5 bg-neutral-100">{children}</div>
+          <div className="col-span-5 row-span-5 bg-neutral-100">
+            <div className="mx-4 px-5 py-5 rounded-lg border bg-white drop-shadow-md">
+              {children}
+            </div>
+          </div>
         </div>
       </body>
     </html>
