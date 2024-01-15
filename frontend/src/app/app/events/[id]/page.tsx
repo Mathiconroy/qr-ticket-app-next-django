@@ -1,3 +1,10 @@
+import TicketTypeForm from "./ticketTypeForm";
+
 export default function EventDetails({ params }: { params: { id: number }}) {
-    return <h1>Event with id {params.id}</h1>;
+  return (
+    <>
+      <h1>Event with id {params.id}</h1>
+      <TicketTypeForm />
+    </>
+  );
 }

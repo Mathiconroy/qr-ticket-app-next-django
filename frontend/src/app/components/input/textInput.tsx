@@ -1,15 +1,15 @@
 export default function FormInput({
   name,
   id,
-  type,
+  type = "text",
   label,
-  isTextarea,
+  isTextarea = false,
 }: {
   name: string,
   id: string,
   type?: string,
   label: string,
-  isTextarea: boolean,
+  isTextarea?: boolean,
 }) {
   return (
     <div>
