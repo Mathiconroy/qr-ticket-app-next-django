@@ -1,4 +1,4 @@
-export default function InputButton({
+export default function FormButton({
   text,
   className = "",
 }: {
