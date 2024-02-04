@@ -1,5 +1,5 @@
 from django.contrib.auth import get_user_model
-from .models import Event, Ticket, TicketType
+from qr_tickets.models import Event, Ticket, TicketType
 from rest_framework import serializers
 
 

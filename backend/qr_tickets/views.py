@@ -6,8 +6,8 @@ from rest_framework.views import APIView
 from django.contrib.auth import authenticate, login
 from rest_framework import mixins
 from rest_framework import generics
-from .models import Event
-from .serializers import EventSerializer
+from qr_tickets.models import Event, TicketType
+from qr_tickets.serializers import EventSerializer, TicketTypeSerializer
 
 
 class LoginUser(APIView):
@@ -54,6 +54,15 @@ class EventList(mixins.ListModelMixin, mixins.CreateModelMixin, generics.Generic
     def perform_create(self, serializer):
         serializer.save(created_by=self.request.user)
 
+
+class TicketTypeList(APIView):
+
+    def get(self, request, event_id):
+        ticketTypes = TicketTypeSerializer([ticketType for ticketType in TicketType.objects.filter(event_id=event_id, event__created_by=request.user)], many=True)
+        return Response(ticketTypes.data)
+
+    def post(self, request, event_id):
+        tickeType = TicketTypeSerializer.create()
 
 class CustomAuthToken(ObtainAuthToken):
 
