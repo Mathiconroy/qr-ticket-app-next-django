@@ -1,6 +1,8 @@
 "use client";
 
 import InputButton from "@/app/components/input/button";
+import Card from "@/app/components/display/card";
+import CardGrid from "@/app/components/display/cardGrid";
 import axiosInstance from "@/app/axiosInstance";
 import { Key } from "react";
 import { useEffect, useState } from "react";
@@ -25,9 +27,9 @@ export default function EventDashboard() {
     fetchEventData();
   }, []);
   return (
-    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+    <CardGrid>
       {eventData !== undefined ? eventData.map((event: Event) => <EventCard key={event.id} event={event} />) : ''}
-    </div>
+    </CardGrid>
   );
 }
 
@@ -37,14 +39,14 @@ function EventCard({
   event: Event 
 }) {
   return (
-    <div className="border-2 rounded-lg">
+    <Card>
       <div className="p-2 font-bold text-lg">{event.name}</div>
       <div className="">Time</div>
       <div className="">Description: {event.description}</div>
       <div className="">Tickets sold</div>
       <div className="">Tickets left</div>
-      <InputButton className="m-2" text="Edit"/>
-      <InputButton text="Details"/>
-    </div>
+      <InputButton className="m-2" text="Edit" linkHref={`/app/events/${event.id}`}/>
+      <InputButton text="Details" linkHref={`/app/events/${event.id}`}/>
+    </Card>
   );
 }
