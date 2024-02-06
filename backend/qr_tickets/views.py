@@ -1,4 +1,3 @@
-
 from rest_framework.authtoken.views import ObtainAuthToken
 from rest_framework.authtoken.models import Token
 from rest_framework.response import Response
@@ -17,7 +16,7 @@ class LoginUser(APIView):
     authentication_classes = []
     permission_classes = []
 
-    def post(self, request, format=None):
+    def post(self, request):
         username = request.POST["username"]
         password = request.POST["password"]
         user = authenticate(request, username=username, password=password)
@@ -58,14 +57,17 @@ class EventList(mixins.ListModelMixin, mixins.CreateModelMixin, generics.Generic
 class TicketTypeList(APIView):
 
     def get(self, request, event_id):
-        ticketTypes = TicketTypeSerializer([ticketType for ticketType in TicketType.objects.filter(event_id=event_id, event__created_by=request.user)], many=True)
-        return Response(ticketTypes.data)
+        ticket_types = TicketTypeSerializer(
+            [ticketType for ticketType in TicketType.objects.filter(event_id=event_id, event__created_by=request.user)],
+            many=True)
+        return Response(ticket_types.data)
 
     def post(self, request, event_id):
-        tickeType = TicketTypeSerializer.create()
+        # TODO: Figure this out.
+        ticket_type = TicketTypeSerializer.create()
+
 
 class CustomAuthToken(ObtainAuthToken):
-
     def post(self, request, *args, **kwargs):
         serializer = self.serializer_class(
             data=request.data,

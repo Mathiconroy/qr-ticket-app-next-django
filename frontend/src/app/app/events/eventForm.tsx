@@ -20,6 +20,5 @@ function handleEventForm(e: FormEvent) {
   e.preventDefault();
   const form = document.querySelector("#eventForm") as HTMLFormElement;
   const formData = new FormData(form);
-  formData.append("created_by", "1");
   axiosInstance.post('events/', formData);
 }

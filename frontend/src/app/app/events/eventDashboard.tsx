@@ -6,6 +6,7 @@ import CardGrid from "@/app/components/display/cardGrid";
 import axiosInstance from "@/app/axiosInstance";
 import { Key } from "react";
 import { useEffect, useState } from "react";
+import Link from "next/link";
 
 interface Event {
   id: Key,
@@ -45,8 +46,12 @@ function EventCard({
       <div className="">Description: {event.description}</div>
       <div className="">Tickets sold</div>
       <div className="">Tickets left</div>
-      <InputButton className="m-2" text="Edit" linkHref={`/app/events/${event.id}`}/>
-      <InputButton text="Details" linkHref={`/app/events/${event.id}`}/>
+      <Link href={`/app/events/${event.id}`}>
+        <InputButton className="m-2" text="Edit"/>
+      </Link>
+      <Link href={`/app/events/${event.id}`}>
+        <InputButton text="Details"/>
+      </Link>
     </Card>
   );
 }
