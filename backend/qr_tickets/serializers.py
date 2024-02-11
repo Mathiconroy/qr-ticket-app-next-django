@@ -20,6 +20,14 @@ class TicketTypeSerializer(serializers.ModelSerializer):
         model = TicketType
         fields = ['id', 'event', 'name', 'price']
 
+    def create(self, validated_data):
+        ticket_type = TicketType.objects.create(
+            event_id=validated_data['event_id'],
+            name=validated_data['name'],
+            price=validated_data['price']
+        )
+        ticket_type.save()
+
 
 class TicketSerializer(serializers.ModelSerializer):
     class Meta:

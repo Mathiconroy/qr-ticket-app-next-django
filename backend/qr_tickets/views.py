@@ -55,16 +55,18 @@ class EventList(mixins.ListModelMixin, mixins.CreateModelMixin, generics.Generic
 
 
 class TicketTypeList(APIView):
-
     def get(self, request, event_id):
         ticket_types = TicketTypeSerializer(
             [ticketType for ticketType in TicketType.objects.filter(event_id=event_id, event__created_by=request.user)],
-            many=True)
+            many=True
+        )
         return Response(ticket_types.data)
 
     def post(self, request, event_id):
-        # TODO: Figure this out.
-        ticket_type = TicketTypeSerializer.create()
+        data = request.POST.copy()
+        data['event_id'] = event_id
+        TicketTypeSerializer().create(data)
+        return Response({'msg': 'success'})
 
 
 class CustomAuthToken(ObtainAuthToken):
