@@ -61,7 +61,7 @@ export default function RootLayout({
             </div>
           </div>
           <div className="col-span-5 row-span-5 bg-neutral-100">
-            <div className="mx-4 px-5 py-5 rounded-lg border bg-white drop-shadow-md">
+            <div className="mx-4 rounded-lg border bg-white px-5 py-5 drop-shadow-md">
               {children}
             </div>
           </div>

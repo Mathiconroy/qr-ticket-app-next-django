@@ -9,48 +9,49 @@ import { useEffect, useState } from "react";
 import Link from "next/link";
 
 interface Event {
-  id: Key,
-  created_by: Number,
-  name: string,
-  scheduled_datetime: string,
-  description: string,
-  created_at: string,
-  edited_at: string,
+  id: Key;
+  created_by: Number;
+  name: string;
+  scheduled_datetime: string;
+  description: string;
+  created_at: string;
+  edited_at: string;
 }
 
 export default function EventDashboard() {
   const [eventData, setEventData] = useState<Event[]>();
   useEffect(() => {
     async function fetchEventData() {
-      const eventResponse = await axiosInstance.get('events/');
+      const eventResponse = await axiosInstance.get("events/");
       setEventData(eventResponse.data);
     }
+
     fetchEventData();
   }, []);
   return (
     <CardGrid>
-      {eventData !== undefined ? eventData.map((event: Event) => <EventCard key={event.id} event={event} />) : ''}
+      {eventData !== undefined
+        ? eventData.map((event: Event) => (
+            <EventCard key={event.id} event={event} />
+          ))
+        : ""}
     </CardGrid>
   );
 }
 
-function EventCard({
-  event 
-}: {
-  event: Event 
-}) {
+function EventCard({ event }: { event: Event }) {
   return (
     <Card>
-      <div className="p-2 font-bold text-lg">{event.name}</div>
+      <div className="p-2 text-lg font-bold">{event.name}</div>
       <div className="">Time</div>
       <div className="">Description: {event.description}</div>
       <div className="">Tickets sold</div>
       <div className="">Tickets left</div>
       <Link href={`/app/events/${event.id}`}>
-        <InputButton className="m-2" text="Edit"/>
+        <InputButton className="m-2" text="Edit" />
       </Link>
       <Link href={`/app/events/${event.id}`}>
-        <InputButton text="Details"/>
+        <InputButton text="Details" />
       </Link>
     </Card>
   );

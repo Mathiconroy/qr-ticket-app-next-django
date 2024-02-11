@@ -4,8 +4,8 @@ import { useState, useEffect } from "react";
 import axiosInstance from "../axiosInstance";
 
 interface UserData {
-  username: string,
-  isAuthenticated: boolean,
+  username: string;
+  isAuthenticated: boolean;
 }
 
 export default function UserInfoBanner() {
@@ -13,9 +13,10 @@ export default function UserInfoBanner() {
 
   useEffect(() => {
     async function fetchUserData() {
-      const response = await axiosInstance.get('whoami/');
+      const response = await axiosInstance.get("whoami/");
       setUserData(response.data);
     }
+
     fetchUserData();
   }, []);
 
