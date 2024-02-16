@@ -4,6 +4,8 @@ import Card from "@/app/components/display/card";
 import TicketTypeForm from "./ticketTypeForm";
 import axiosInstance from "@/app/axiosInstance";
 import { useState, useEffect } from "react";
+import FormButton from "@/app/components/input/button";
+import Link from "next/link";
 
 interface TicketType {
   id: number;
@@ -12,30 +14,34 @@ interface TicketType {
 }
 
 export default function EventDetails({ params }: { params: { id: number } }) {
-  const [eventData, setEventData] = useState<TicketType[]>();
+  const [ticketTypeData, setTicketTypeData] = useState<TicketType[]>();
   useEffect(() => {
-    async function fetchEventData() {
+    async function fetchTicketTypeData() {
       const eventResponse = await axiosInstance.get(
         `events/${params.id}/ticketTypes/`,
       );
-      setEventData(eventResponse.data);
+      setTicketTypeData(eventResponse.data);
     }
-
-    fetchEventData();
-  }, []);
+    fetchTicketTypeData();
+  }, [params.id]);
   return (
     <>
-      <h1>Event with id {params.id}</h1>
       <TicketTypeForm event_id={params.id} />
-      <CardGrid>
-        {eventData !== undefined
-          ? eventData.map((event: TicketType) => (
-              <Card key={event.id}>
-                <div>{event.name}</div>
-              </Card>
-            ))
-          : ""}
-      </CardGrid>
+      <div className={'mt-3'}>
+        <CardGrid>
+        {ticketTypeData !== undefined ?
+          ticketTypeData.map((ticketType: TicketType) => (
+            <Card key={ticketType.id}>
+              <div>Name: {ticketType.name}</div>
+              <div>Price: {ticketType.price}</div>
+              <Link href={`${params.id}/tickets`}>
+                <FormButton text={'Generate tickets'} />
+              </Link>
+            </Card>
+          )) : ""
+        }
+        </CardGrid>
+      </div>
     </>
   );
 }
