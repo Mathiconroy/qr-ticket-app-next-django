@@ -7,7 +7,7 @@ export default function FormButton({
 }) {
   return (
     <button
-      className={`my-4 rounded-lg bg-blue-500 p-3 text-white ${className}`}
+      className={`mt-3 rounded-lg bg-blue-500 p-3 text-white ${className}`}
     >
       {text}
     </button>
