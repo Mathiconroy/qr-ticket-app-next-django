@@ -1,22 +1,11 @@
 "use client";
-
 import InputButton from "@/app/components/input/button";
 import Card from "@/app/components/display/card";
 import CardGrid from "@/app/components/display/cardGrid";
 import axiosInstance from "@/app/axiosInstance";
-import { Key } from "react";
+import { Event } from "@/app/interfaces/interfaces";
 import { useEffect, useState } from "react";
 import Link from "next/link";
-
-interface Event {
-  id: Key;
-  created_by: Number;
-  name: string;
-  scheduled_datetime: string;
-  description: string;
-  created_at: string;
-  edited_at: string;
-}
 
 export default function EventDashboard() {
   const [eventData, setEventData] = useState<Event[]>();

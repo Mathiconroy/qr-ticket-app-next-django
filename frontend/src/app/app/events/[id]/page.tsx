@@ -6,12 +6,7 @@ import axiosInstance from "@/app/axiosInstance";
 import { useState, useEffect } from "react";
 import FormButton from "@/app/components/input/button";
 import Link from "next/link";
-
-interface TicketType {
-  id: number;
-  name: string;
-  price: number;
-}
+import { TicketType } from "@/app/interfaces/interfaces";
 
 export default function EventDetails({ params }: { params: { id: number } }) {
   const [ticketTypeData, setTicketTypeData] = useState<TicketType[]>();
