@@ -37,6 +37,19 @@ class TicketType(models.Model):
         return f'{self.id} - {self.name}'
 
 
-class Ticket(models.Model):
-    owner = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+class TicketOrderHeader(models.Model):
+    event = models.ForeignKey(Event, on_delete=models.CASCADE)
+    buyer = models.CharField(max_length=100)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f'{self.id} - {self.event.name} bought by {self.buyer}'
+
+
+class TicketOrderDetail(models.Model):
+    order_header = models.ForeignKey(TicketOrderHeader, on_delete=models.CASCADE)
     ticket_type = models.ForeignKey(TicketType, on_delete=models.CASCADE)
+    amount = models.IntegerField()
+
+    def __str__(self):
+        return f'{self.order_header.id} - {self.ticket_type.name} ({self.amount})'
