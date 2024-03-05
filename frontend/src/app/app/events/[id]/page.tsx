@@ -22,19 +22,19 @@ export default function EventDetails({ params }: { params: { id: number } }) {
   return (
     <>
       <TicketTypeForm event_id={params.id} />
-      <div className={'mt-3'}>
+      <div className={"mt-3"}>
         <CardGrid>
-        {ticketTypeData !== undefined ?
-          ticketTypeData.map((ticketType: TicketType) => (
-            <Card key={ticketType.id}>
-              <div>Name: {ticketType.name}</div>
-              <div>Price: {ticketType.price}</div>
-              <Link href={`${params.id}/tickets`}>
-                <FormButton text={'Generate tickets'} />
-              </Link>
-            </Card>
-          )) : ""
-        }
+          {ticketTypeData !== undefined
+            ? ticketTypeData.map((ticketType: TicketType) => (
+                <Card key={ticketType.id}>
+                  <div>Name: {ticketType.name}</div>
+                  <div>Price: {ticketType.price}</div>
+                  <Link href={`${params.id}/tickets`}>
+                    <FormButton text={"Generate tickets"} />
+                  </Link>
+                </Card>
+              ))
+            : ""}
         </CardGrid>
       </div>
     </>
