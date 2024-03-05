@@ -13,3 +13,8 @@ export interface Event {
   created_at: string;
   edited_at: string;
 }
+
+export interface TicketOrderDetail {
+  ticket_type_id: number;
+  amount: number;
+}
