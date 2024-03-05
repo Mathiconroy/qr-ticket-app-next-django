@@ -3,11 +3,14 @@ from rest_framework.authtoken.models import Token
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from django.contrib.auth import authenticate, login
-from rest_framework import mixins
+from rest_framework import mixins, viewsets
 from rest_framework import generics
-from qr_tickets.models import Event, TicketType
-from qr_tickets.serializers import EventSerializer, TicketTypeSerializer
-
+from qr_tickets.models import Event, TicketType, TicketOrderHeader
+from qr_tickets.serializers import EventSerializer, TicketTypeSerializer, TicketOrderHeaderSerializer, \
+    TicketOrderDetailSerializer
+from rest_framework.parsers import JSONParser
+import json
+import io
 
 class LoginUser(APIView):
     """
@@ -67,6 +70,33 @@ class TicketTypeList(APIView):
         data['event_id'] = event_id
         TicketTypeSerializer().create(data)
         return Response({'msg': 'success'})
+
+
+# TODO: This.
+class TicketOrderViewSet(viewsets.ViewSet):
+    def list(self, request, event_id):
+        queryset = TicketOrderHeader.objects.filter(event__id=event_id)
+        serializer = TicketOrderHeaderSerializer(queryset, many=True)
+        return Response(serializer.data)
+
+    # TODO: Figure this out.
+    def create(self, request, event_id):
+        query_dict = request.POST.copy()
+        query_dict['event_id'] = event_id
+        stream = io.StringIO(query_dict['tickets'])
+        query_dict['tickets'] = json.load(stream)
+        print(query_dict)
+        TicketOrderHeaderSerializer().create(query_dict)
+        #ticket_order_detail = TicketOrderDetailSerializer(data=query_dict['tickets'], many=True)
+        #ticket_order_detail.is_valid()
+        #print(ticket_order_detail.data)
+
+        return Response()
+
+    def retrieve(self, request, event_id, order_header_id):
+        queryset = TicketOrderHeader.objects.filter(event__id=event_id, id=order_header_id)
+        serializer = TicketOrderHeaderSerializer(queryset)
+        return Response(serializer.data)
 
 
 class CustomAuthToken(ObtainAuthToken):

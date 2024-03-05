@@ -47,7 +47,7 @@ class TicketOrderHeader(models.Model):
 
 
 class TicketOrderDetail(models.Model):
-    order_header = models.ForeignKey(TicketOrderHeader, on_delete=models.CASCADE)
+    order_header = models.ForeignKey(TicketOrderHeader, on_delete=models.CASCADE, related_name='tickets')
     ticket_type = models.ForeignKey(TicketType, on_delete=models.CASCADE)
     amount = models.IntegerField()
 
