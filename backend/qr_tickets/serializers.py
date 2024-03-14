@@ -24,6 +24,8 @@ class UserSerializer(serializers.Serializer):
 
 
 class EventSerializer(serializers.ModelSerializer):
+    scheduled_datetime = serializers.DateTimeField(format='%Y/%m/%d %I:%M%p')
+
     class Meta:
         model = Event
         fields = ['id', 'name', 'scheduled_datetime', 'description', 'created_at', 'edited_at']
