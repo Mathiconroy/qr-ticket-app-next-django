@@ -1,3 +1,15 @@
+import Link from "next/link";
+import FormButton from "@/app/components/input/button";
+
 export default function Home() {
-  return <p>Hello world!</p>;
+  return (
+    <div>
+      <Link href={"/login"}>
+        <FormButton text={"Login"} />
+      </Link>
+      <Link href={"/app"}>
+        <FormButton text={"Go to app"} />
+      </Link>
+    </div>
+  );
 }

@@ -73,8 +73,6 @@ function handleFormSubmit(
       });
     }
   }
-  console.log(tickets);
   formData.set("tickets", JSON.stringify(tickets));
-  console.log(formData);
   axiosInstance.post(`/events/${eventId}/tickets/`, formData);
 }

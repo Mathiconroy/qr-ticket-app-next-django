@@ -32,10 +32,17 @@ function EventCard({ event }: { event: Event }) {
   return (
     <Card>
       <div className="p-2 text-lg font-bold">{event.name}</div>
-      <div className="">Time</div>
-      <div className="">Description: {event.description}</div>
-      <div className="">Tickets sold</div>
-      <div className="">Tickets left</div>
+      <div className="">Date: {event.scheduled_datetime}</div>
+      {event.description ? (
+        <div className="">Description: {event.description}</div>
+      ) : (
+        <div></div>
+      )}
+      {/*
+        TODO: Add the calculations for these fields.
+      */}
+      <div className="">Tickets sold:</div>
+      <div className="">Tickets left:</div>
       <Link href={`/app/events/${event.id}`}>
         <InputButton className="m-2" text="Edit" />
       </Link>

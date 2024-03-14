@@ -28,7 +28,7 @@ export default function EventForm() {
         name="description"
         isTextarea={true}
       />
-      <FormButton text="Create event"></FormButton>
+      <FormButton text="Create event" className={"mb-2"}></FormButton>
     </form>
   );
 }
