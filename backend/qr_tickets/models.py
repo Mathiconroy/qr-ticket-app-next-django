@@ -42,6 +42,7 @@ class TicketOrderHeader(models.Model):
     event = models.ForeignKey(Event, on_delete=models.CASCADE)
     buyer = models.CharField(max_length=100)
     created_at = models.DateTimeField(auto_now_add=True)
+    qr_hash = models.TextField()
 
     def __str__(self):
         return f'{self.id} - {self.event.name} bought by {self.buyer}'
@@ -54,3 +55,9 @@ class TicketOrderDetail(models.Model):
 
     def __str__(self):
         return f'{self.order_header.id} - {self.ticket_type.name} ({self.amount})'
+
+    def serialize(self):
+        return {
+            'ticket_type': self.ticket_type.id,
+            'amount': self.amount
+        }
