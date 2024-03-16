@@ -1,5 +1,6 @@
 import Card from "@/app/components/display/card";
 import TicketsForm from "@/app/app/events/[id]/tickets/ticketsForm";
+import Title from "@/app/components/display/title";
 
 export default function TicketGenerator({
   params,
@@ -8,7 +9,7 @@ export default function TicketGenerator({
 }) {
   return (
     <div>
-      Generate tickets
+      <Title>Generate tickets</Title>
       <TicketsForm eventId={params.id} />
     </div>
   );
