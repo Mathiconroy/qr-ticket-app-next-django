@@ -11,7 +11,6 @@ export default function TicketTypeForm({ event_id }: { event_id: number }) {
       <FormInput
         name="event"
         id="event_id"
-        label="Event ID"
         type="hidden"
         value={String(event_id)}
       />

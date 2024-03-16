@@ -2,27 +2,29 @@ export default function FormInput({
   name,
   id,
   type = "text",
-  label,
+  label = "",
   isTextarea = false,
   value,
 }: {
   name: string;
   id: string;
   type?: string;
-  label: string;
+  label?: string;
   isTextarea?: boolean;
   value?: string;
 }) {
   return (
     <div>
-      <label htmlFor={id} className="block py-2">
+      <label htmlFor={id} className={type !== "hidden" ? "block py-2" : ""}>
         {label}
       </label>
       {isTextarea ? (
         <textarea
           name={name}
           id={id}
-          className="block w-full rounded-lg border p-2"
+          className={
+            type !== "hidden" ? "block w-full rounded-lg border p-2" : ""
+          }
           value={value}
         />
       ) : (
