@@ -85,13 +85,8 @@ class TicketOrderViewSet(viewsets.ViewSet):
         query_dict['event_id'] = event_id
         stream = io.StringIO(query_dict['tickets'])
         query_dict['tickets'] = json.load(stream)
-        print(query_dict)
         TicketOrderHeaderSerializer().create(query_dict)
-        #ticket_order_detail = TicketOrderDetailSerializer(data=query_dict['tickets'], many=True)
-        #ticket_order_detail.is_valid()
-        #print(ticket_order_detail.data)
-
-        return Response()
+        return Response({'message': 'Ticket order created successfully!'})
 
     def retrieve(self, request, event_id, order_header_id):
         queryset = TicketOrderHeader.objects.filter(event__id=event_id, id=order_header_id)

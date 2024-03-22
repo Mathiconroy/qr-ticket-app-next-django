@@ -1,9 +1,11 @@
-from decimal import Decimal
-
 from django.contrib.auth import get_user_model
+from django.core.signing import Signer
 from qr_tickets.models import Event, TicketType, TicketOrderHeader, TicketOrderDetail
 from rest_framework import serializers
+
 import math
+import segno
+from decimal import Decimal
 
 
 class RangeValidator:
@@ -47,6 +49,8 @@ class TicketTypeSerializer(serializers.ModelSerializer):
 
 
 class TicketOrderDetailSerializer(serializers.ModelSerializer):
+    amount = serializers.IntegerField(min_value=1)
+
     class Meta:
         model = TicketOrderDetail
         fields = ['id', 'order_header', 'ticket_type', 'amount']
@@ -54,23 +58,37 @@ class TicketOrderDetailSerializer(serializers.ModelSerializer):
 
 class TicketOrderHeaderSerializer(serializers.ModelSerializer):
     tickets = TicketOrderDetailSerializer(many=True)
+    qr_svg = serializers.SerializerMethodField()
 
     class Meta:
         model = TicketOrderHeader
-        fields = ['id', 'buyer', 'event', 'created_at', 'tickets']
+        fields = ['id', 'buyer', 'event', 'created_at', 'tickets', 'qr_svg']
+
+    def get_qr_svg(self, obj):
+        qrcode = segno.make(obj.qr_hash, version=8, micro=False)
+        return qrcode.svg_inline(scale=5)
 
     def create(self, validated_data):
+        signer = Signer()
+        dict_to_sign = {
+            'event': validated_data['event_id'],
+            'buyer': validated_data['buyer'],
+            'tickets': validated_data['tickets']
+        }
+        qr_hash = signer.sign_object(dict_to_sign)
         ticket_order_header = TicketOrderHeader(
             event_id=validated_data['event_id'],
-            buyer=validated_data['buyer']
+            buyer=validated_data['buyer'],
+            qr_hash=qr_hash
         )
         ticket_order_header.save()
 
         for ticket in validated_data['tickets']:
-            ticket_type = TicketType.objects.get(pk=ticket['ticket_type_id'])
-            ticket_order_detail = TicketOrderDetail(
-                order_header=ticket_order_header,
-                ticket_type=ticket_type,
-                amount=ticket['amount']
-            )
-            ticket_order_detail.save()
+            if ticket['amount'] > 0:
+                ticket_type = TicketType.objects.get(pk=ticket['ticket_type_id'])
+                ticket_order_header.tickets.create(
+                    ticket_type=ticket_type,
+                    amount=ticket['amount']
+                )
+
+        return ticket_order_header
