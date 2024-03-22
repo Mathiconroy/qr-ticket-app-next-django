@@ -38,6 +38,9 @@ class TicketType(models.Model):
         return f'{self.id} - {self.name}'
 
 
+# TODO: Actually think this through, you're basically storing passwords in plaintext lol.
+# TODO: If the db leaks, the attacker can generate all the urls because they only need the hash.
+# TODO: Maybe actually store the salt? That way if the db leaks, they can't do anything with the salt because they'd need the SECRET_KEY too.
 class TicketOrderHeader(models.Model):
     event = models.ForeignKey(Event, on_delete=models.CASCADE)
     buyer = models.CharField(max_length=100)

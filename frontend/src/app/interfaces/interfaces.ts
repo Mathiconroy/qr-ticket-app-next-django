@@ -18,3 +18,11 @@ export interface TicketOrderDetail {
   ticket_type_id: number;
   amount: number;
 }
+
+export interface TicketOrderHeader {
+  event: number;
+  buyer: string;
+  created_at: string;
+  qr_svg: string;
+  tickets: TicketOrderDetail[];
+}
