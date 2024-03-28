@@ -2,6 +2,7 @@ from django.contrib.auth import get_user_model
 from django.core.signing import Signer
 from qr_tickets.models import Event, TicketType, TicketOrderHeader, TicketOrderDetail
 from rest_framework import serializers
+from django.conf import settings
 
 import math
 import segno
@@ -26,7 +27,7 @@ class UserSerializer(serializers.Serializer):
 
 
 class EventSerializer(serializers.ModelSerializer):
-    scheduled_datetime = serializers.DateTimeField(format='%Y/%m/%d %I:%M%p')
+    scheduled_datetime = serializers.DateTimeField(format=settings.DATETIME_FORMAT)
 
     class Meta:
         model = Event
@@ -65,10 +66,26 @@ class TicketOrderHeaderSerializer(serializers.ModelSerializer):
         fields = ['id', 'buyer', 'event', 'created_at', 'tickets', 'qr_svg']
 
     def get_qr_svg(self, obj):
-        qrcode = segno.make(obj.qr_hash, version=8, micro=False)
-        return qrcode.svg_inline(scale=5)
+        dict_to_hash = {
+            'event': obj.event.id,
+            'buyer': obj.buyer,
+            'created_at': obj.created_at.isoformat(),
+            'tickets': [
+                {
+                    'id': ticket.id,
+                    'order_header': ticket.order_header.id,
+                    'ticket_type': ticket.ticket_type.id,
+                    'amount': ticket.amount
+                } for ticket in obj.tickets.all()
+            ]
+        }
+        signer = Signer()
+        value = signer.sign_object(dict_to_hash)
+        qrcode = segno.make(value, micro=False)
+        return qrcode.svg_inline(scale=3)
 
     def create(self, validated_data):
+        # TODO: Probably delete this later or change the value stored in qr_hash.
         signer = Signer()
         dict_to_sign = {
             'event': validated_data['event_id'],

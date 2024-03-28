@@ -41,11 +41,17 @@ class TicketType(models.Model):
 # TODO: Actually think this through, you're basically storing passwords in plaintext lol.
 # TODO: If the db leaks, the attacker can generate all the urls because they only need the hash.
 # TODO: Maybe actually store the salt? That way if the db leaks, they can't do anything with the salt because they'd need the SECRET_KEY too.
+# Ok, so, make QR with event id, buyer name, timestamp and tickets json.
+# In this case, you generate the string with a route like /tickets/redeem/<hash> to QRify.
+# Then, if someone enters that route the hash sent will be unsigned and values will be checked against the db.
+# If everything checks out, ticket is redeemed.
+# This is assumed to be safe because if db leaks, attackers will need the private key which is not public.
 class TicketOrderHeader(models.Model):
     event = models.ForeignKey(Event, on_delete=models.CASCADE)
     buyer = models.CharField(max_length=100)
     created_at = models.DateTimeField(auto_now_add=True)
     qr_hash = models.TextField()
+    is_redeemed = models.BooleanField(default=False)
 
     def __str__(self):
         return f'{self.id} - {self.event.name} bought by {self.buyer}'
