@@ -82,8 +82,7 @@ class TicketOrderHeaderSerializer(serializers.ModelSerializer):
         }
         signer = Signer()
         value = signer.sign_object(dict_to_hash)
-        url_for_qr = f'{settings.SITE_DOMAIN}{reverse('redeem-ticket', args=[value])}'
-        print(url_for_qr)
+        url_for_qr = f'{settings.BACKEND_DOMAIN}{reverse('redeem-ticket', args=[value])}'
         qrcode = segno.make(url_for_qr, micro=False)
         return qrcode.svg_inline(scale=3)
 

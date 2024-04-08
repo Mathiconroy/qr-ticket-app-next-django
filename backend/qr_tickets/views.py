@@ -1,3 +1,4 @@
+from django.core import signing
 from rest_framework.authtoken.views import ObtainAuthToken
 from rest_framework.authtoken.models import Token
 from rest_framework.response import Response
@@ -96,16 +97,36 @@ class TicketOrderViewSet(viewsets.ViewSet):
         return Response(serializer.data)
 
 
-# TODO: Change redeem bool value and add validation for it.
 class RedeemTicketView(APIView):
 
     def get(self, request, qr_key):
         # Get QR signed value and try to unsign it, if successful, verify values.
         # Else, throw an error.
         # After validation, mark ticket as redeemed.
-        signer = Signer()
-        ticket_order_dict = signer.unsign_object(qr_key)
-        return Response(ticket_order_dict)
+        try:
+            signer = Signer()
+            ticket_order_dict = signer.unsign_object(qr_key)
+        except signing.BadSignature:
+            return Response({'error': 'Ticket order is not valid.'}, status=400)
+
+        try:
+            ticket_order = TicketOrderHeader.objects.get(
+                buyer=ticket_order_dict['buyer'],
+                created_at=ticket_order_dict['created_at'],
+                event__id=ticket_order_dict['event'],
+            )
+            # TODO: Maybe ditch the tickets verification OR figure out how to make it work.
+        except TicketOrderHeader.DoesNotExist:
+            return Response({'error': 'No ticket orders found.'}, status=404)
+
+        if ticket_order.is_redeemed:
+            return Response({'error': 'Ticket order is already redeemed!'}, status=400)
+
+        # Change redeemed status and return data with serializer.
+        ticket_order.is_redeemed = True
+        ticket_order.save()
+        ticket_order_serializer = TicketOrderHeaderSerializer(ticket_order)
+        return Response(ticket_order_serializer.data)
 
 
 class CustomAuthToken(ObtainAuthToken):
