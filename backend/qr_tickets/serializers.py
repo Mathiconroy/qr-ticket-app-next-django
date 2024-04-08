@@ -2,6 +2,7 @@ from django.contrib.auth import get_user_model
 from django.core.signing import Signer
 from qr_tickets.models import Event, TicketType, TicketOrderHeader, TicketOrderDetail
 from rest_framework import serializers
+from rest_framework.reverse import reverse
 from django.conf import settings
 
 import math
@@ -81,7 +82,9 @@ class TicketOrderHeaderSerializer(serializers.ModelSerializer):
         }
         signer = Signer()
         value = signer.sign_object(dict_to_hash)
-        qrcode = segno.make(value, micro=False)
+        url_for_qr = f'{settings.SITE_DOMAIN}{reverse('redeem-ticket', args=[value])}'
+        print(url_for_qr)
+        qrcode = segno.make(url_for_qr, micro=False)
         return qrcode.svg_inline(scale=3)
 
     def create(self, validated_data):
