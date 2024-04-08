@@ -11,19 +11,22 @@ https://docs.djangoproject.com/en/4.2/ref/settings/
 """
 
 from pathlib import Path
+from dotenv import load_dotenv
+import os
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
+load_dotenv(BASE_DIR / '.env')
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/4.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-uo54lyj$2m(#s6d7tg-5)@!^3u_!4+e_^)-axca=(!8hansw^*'
+SECRET_KEY = os.environ.get('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = bool(os.environ.get('DEBUG', 0))
 
 ALLOWED_HOSTS = []
 
@@ -157,3 +160,7 @@ AUTH_USER_MODEL = 'qr_tickets.User'
 
 DATE_FORMAT = '%Y/%m/%d %I:%M%p'
 DATETIME_FORMAT = '%Y/%m/%d %I:%M%p'
+
+# Custom conf
+BACKEND_DOMAIN = os.environ.get('BACKEND_DOMAIN')
+FRONTEND_DOMAIN = os.environ.get('FRONTEND_DOMAIN')
