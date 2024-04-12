@@ -11,8 +11,8 @@ urlpatterns = [
     path("api-token-auth/", CustomAuthToken.as_view()),
     path("login/", LoginUser.as_view()),
     path("whoami/", WhoAmI.as_view()),
-    path("events/", EventList.as_view()),
-    path("events/<int:event_id>/ticketTypes/", TicketTypeList.as_view()),
+    path("events/", EventList.as_view(), name="event-list"),
+    path("events/<int:event_id>/ticketTypes/", TicketTypeList.as_view(), name="ticket-type-list"),
     path("tickets/redeem/<str:qr_key>/", RedeemTicketView.as_view(), name="redeem-ticket")
 ]
 

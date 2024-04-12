@@ -46,7 +46,8 @@ class TicketTypeSerializer(serializers.ModelSerializer):
         TicketType.objects.create(
             event_id=validated_data['event_id'],
             name=validated_data['name'],
-            price=validated_data['price']
+            price=validated_data['price'],
+            max_quantity=validated_data['max_quantity']
         )
 
 

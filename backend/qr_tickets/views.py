@@ -4,7 +4,7 @@ from rest_framework.authtoken.models import Token
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from django.contrib.auth import authenticate, login
-from rest_framework import mixins, viewsets
+from rest_framework import mixins, viewsets, status
 from rest_framework import generics
 from qr_tickets.models import Event, TicketType, TicketOrderHeader
 from qr_tickets.serializers import EventSerializer, TicketTypeSerializer, TicketOrderHeaderSerializer, \
@@ -72,7 +72,7 @@ class TicketTypeList(APIView):
         data = request.POST.copy()
         data['event_id'] = event_id
         TicketTypeSerializer().create(data)
-        return Response({'msg': 'success'})
+        return Response({'msg': 'success'}, status=status.HTTP_201_CREATED)
 
 
 # TODO: This.
