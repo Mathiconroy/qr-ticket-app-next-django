@@ -7,7 +7,7 @@ import { Event } from "@/app/interfaces/interfaces";
 import { useEffect, useState } from "react";
 import Link from "next/link";
 
-export default function EventDashboard() {
+export default function EventListGrid() {
   const [eventData, setEventData] = useState<Event[]>();
   useEffect(() => {
     async function fetchEventData() {
@@ -31,24 +31,30 @@ export default function EventDashboard() {
 function EventCard({ event }: { event: Event }) {
   return (
     <Card>
-      <div className="p-2 text-lg font-bold">{event.name}</div>
-      <div className="">Date: {event.scheduled_datetime}</div>
-      {event.description ? (
-        <div className="">Description: {event.description}</div>
-      ) : (
-        <div></div>
-      )}
-      {/*
-        TODO: Add the calculations for these fields.
-      */}
-      <div className="">Tickets sold:</div>
-      <div className="">Tickets left:</div>
-      <Link href={`/app/events/${event.id}`}>
-        <InputButton className="m-2" text="Edit" />
-      </Link>
-      <Link href={`/app/events/${event.id}`}>
-        <InputButton text="Details" />
-      </Link>
+      <div className={"grid grid-cols-2"}>
+        <div>
+          <div className="py-2 text-xl font-bold">{event.name}</div>
+          <div className="">Date: {event.scheduled_datetime}</div>
+          {event.description ? (
+            <div className="">Description: {event.description}</div>
+          ) : (
+            <div></div>
+          )}
+          {/*
+            TODO: Add the calculations for these fields.
+          */}
+          <div className="">Tickets sold:</div>
+          <div className="">Tickets left:</div>
+        </div>
+        <div className={"flex items-center justify-end gap-2"}>
+          <Link href={`/app/events/${event.id}`}>
+            <InputButton text="Edit" />
+          </Link>
+          <Link href={`/app/events/${event.id}`}>
+            <InputButton text="Details" />
+          </Link>
+        </div>
+      </div>
     </Card>
   );
 }

@@ -9,7 +9,7 @@ export default function FormButton({
 }) {
   return (
     <button
-      className={`mt-3 rounded-lg bg-blue-500 p-3 text-white ${className}`}
+      className={`rounded-lg bg-blue-500 p-3 text-white ${className}`}
       type={type}
     >
       {text}

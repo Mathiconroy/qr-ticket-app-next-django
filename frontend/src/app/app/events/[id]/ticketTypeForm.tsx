@@ -16,7 +16,7 @@ export default function TicketTypeForm({ event_id }: { event_id: number }) {
       />
       <FormInput id="name" name="name" label="Ticket name" />
       <FormInput id="price" name="price" type="number" label="Price" />
-      <FormButton text="Create" />
+      <FormButton text="Create" className={"mt-4"} />
     </form>
   );
 }

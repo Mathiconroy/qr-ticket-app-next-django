@@ -7,6 +7,7 @@ import { useState, useEffect } from "react";
 import FormButton from "@/app/components/input/button";
 import Link from "next/link";
 import { TicketType } from "@/app/interfaces/interfaces";
+import Title from "@/app/components/display/title";
 
 export default function EventDetails({ params }: { params: { id: number } }) {
   const [ticketTypeData, setTicketTypeData] = useState<TicketType[]>();
@@ -21,7 +22,18 @@ export default function EventDetails({ params }: { params: { id: number } }) {
   }, [params.id]);
   return (
     <>
-      <TicketTypeForm event_id={params.id} />
+      <div className={"grid grid-cols-2 items-center gap-4"}>
+        <Title>Ticket types</Title>
+        <div className={"flex items-center justify-end gap-2"}>
+          <Link href={`${params.id}/ticketTypes/new/`}>
+            <FormButton text={"+ Create Ticket Type"} />
+          </Link>
+          <Link href={`${params.id}/tickets/new/`}>
+            <FormButton text={"+ Create Ticket Order"} />
+          </Link>
+        </div>
+      </div>
+
       <div className={"mt-3"}>
         <CardGrid>
           {ticketTypeData !== undefined
@@ -30,7 +42,7 @@ export default function EventDetails({ params }: { params: { id: number } }) {
                   <div>Name: {ticketType.name}</div>
                   <div>Price: {ticketType.price}</div>
                   <Link href={`${params.id}/tickets`}>
-                    <FormButton text={"Generate tickets"} />
+                    <FormButton text={"See tickets"} />
                   </Link>
                 </Card>
               ))
