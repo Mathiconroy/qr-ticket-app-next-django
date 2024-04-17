@@ -6,6 +6,8 @@ import FormInput from "@/app/components/input/textInput";
 import FormButton from "@/app/components/input/button";
 import axios from "axios";
 
+// TODO: This should probably be moved because I'll definitely use this elsewhere lol.
+// This enum serves to give the classes to be used for each type of message.
 enum MessageTypes {
   Error = "border-red-500 bg-red-200 text-red-800",
   Warning = "border-yellow-500 bg-yellow-200 text-yellow-800",
@@ -17,8 +19,24 @@ interface Message {
   [index: string]: string[];
 }
 
+/*
+ * Messages are rendered as an unordered list with a single item.
+ * message will be rendered as a single item.
+ * Example:
+ * The object {message: "My message."} will be rendered as:
+ * - My message.
+ * messages will be rendered as an unordered list with a list item per key in the messages object.
+ * Example:
+ * The object {messages: {a: "Message a", b: "Message b"}} will be rendered as:
+ * - A
+ *    - Message a
+ * - B
+ *    - Message b
+ * messageType will determine the Tailwind CSS classes to be used for the message box.
+ * */
 interface MessageObject {
-  messages: Message;
+  messages?: Message;
+  message?: string;
   messageType: MessageTypes;
 }
 
@@ -34,7 +52,7 @@ export default function EventForm() {
     try {
       const { data } = await axiosInstance.post("events/", formData);
       setMessageObject({
-        messages: { event: ["Event created successfully."] },
+        message: "Event created successfully.",
         messageType: MessageTypes.Success,
       });
     } catch (error) {
@@ -76,18 +94,29 @@ export default function EventForm() {
 function Messages({ messageObject }: { messageObject: MessageObject }) {
   return (
     <div className={"rounded-md border " + messageObject.messageType}>
-      {Object.keys(messageObject.messages).map(
-        (keyName: string, keyIndex: number) => (
-          <ul key={keyIndex} className={"ml-6 list-disc"}>
-            <li>{keyName.replace(/\b\w/g, (l: string) => l.toUpperCase())}</li>
-            {messageObject.messages[keyName].map((message: string) => (
-              <ul key={keyName} className={"ml-6 list-disc"}>
-                <li key={keyIndex}>{message}</li>
+      {messageObject.messages !== undefined
+        ? Object.keys(messageObject.messages!).map(
+            (keyName: string, keyIndex: number) => (
+              <ul key={keyIndex} className={"ml-6 list-disc"}>
+                <li>
+                  {keyName.replace(/\b\w/g, (l: string) => l.toUpperCase())}
+                </li>
+                {messageObject.messages !== undefined
+                  ? messageObject.messages[keyName].map((message: string) => (
+                      <ul key={keyName} className={"ml-6 list-disc"}>
+                        <li key={keyIndex}>{message}</li>
+                      </ul>
+                    ))
+                  : null}
               </ul>
-            ))}
-          </ul>
-        ),
-      )}
+            ),
+          )
+        : null}
+      {messageObject.message !== undefined ? (
+        <ul className={"ml-6 list-disc"}>
+          <li>{messageObject.message}</li>
+        </ul>
+      ) : null}
     </div>
   );
 }
