@@ -19,21 +19,24 @@ export default function TicketDashboard({ eventId }: { eventId: number }) {
   if (error) return <div>An error has occurred.</div>;
   if (isLoading) return <div>Loading...</div>;
 
-  console.log(data);
   return (
     <div>
       <CardGrid>
-        {data.map((ticketHeader: TicketOrderHeader) => {
-          const markup = { __html: ticketHeader.qr_svg };
-          return (
-            <Card key={ticketHeader.id}>
-              <p>Buyer: {ticketHeader.buyer}</p>
-              <p>QR:</p>
-              <div className={"inline"} dangerouslySetInnerHTML={markup}></div>
-            </Card>
-          );
-        })}
-        <Card></Card>
+        {data !== undefined
+          ? data.map((ticketHeader: TicketOrderHeader) => {
+              const markup = { __html: ticketHeader.qr_svg };
+              return (
+                <Card key={ticketHeader.id}>
+                  <p>Buyer: {ticketHeader.buyer}</p>
+                  <p>QR:</p>
+                  <div
+                    className={"inline"}
+                    dangerouslySetInnerHTML={markup}
+                  ></div>
+                </Card>
+              );
+            })
+          : null}
       </CardGrid>
     </div>
   );
