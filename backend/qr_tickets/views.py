@@ -44,7 +44,7 @@ class WhoAmI(APIView):
         })
 
 
-class EventList(mixins.ListModelMixin, mixins.CreateModelMixin, generics.GenericAPIView):
+class EventList(mixins.ListModelMixin, mixins.CreateModelMixin, mixins.UpdateModelMixin, generics.GenericAPIView):
     serializer_class = EventSerializer
 
     def get(self, request, *args, **kwargs):
@@ -52,6 +52,12 @@ class EventList(mixins.ListModelMixin, mixins.CreateModelMixin, generics.Generic
 
     def post(self, request, *args, **kwargs):
         return self.create(request, *args, **kwargs)
+
+    def put(self, request, *args, **kwargs):
+        return self.update(request, *args, **kwargs)
+
+    def patch(self, request, *args, **kwargs):
+        return self.partial_update(request, *args, **kwargs)
 
     def get_queryset(self):
         return Event.objects.filter(created_by=self.request.user)

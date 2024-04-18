@@ -20,17 +20,45 @@ class EventsTestCase(APITestCase):
         url = reverse('event-list')
         data = {
             'name': 'Test Event',
-            'scheduled_datetime': datetime.datetime.now(),
+            'scheduled_datetime': datetime.datetime.now(tz=datetime.UTC),
             'description': 'Test Description',
         }
         response = self.client.post(url, data, format='json')
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
 
+    def test_edit_event(self):
+        # First test updates with put method.
+        event = Event.objects.create(
+            created_by=self.user,
+            name='Test Event',
+            scheduled_datetime=datetime.datetime.now(tz=datetime.UTC),
+            description='Test Description'
+        )
+        url = reverse('event-detail', args=[event.id])
+        data = {
+            'name': 'New Event Name',
+            'scheduled_datetime': datetime.datetime.now(),
+            'description': 'New Description',
+        }
+        response_put = self.client.put(url, data, format='json')
+        put_event_data = response_put.json()
+        self.assertEqual(response_put.status_code, status.HTTP_200_OK)
+        self.assertEqual(put_event_data['name'], 'New Event Name')
+
+        # Test partial updates with patch method.
+        partial_data = {
+            'name': 'Newer Event Name'
+        }
+        response_patch = self.client.patch(url, partial_data, format='json')
+        event_response = response_patch.json()
+        self.assertEqual(response_patch.status_code, status.HTTP_200_OK)
+        self.assertEqual(event_response['name'], 'Newer Event Name')
+
     def test_create_ticket_type(self):
         event = Event.objects.create(
             created_by=self.user,
             name='Test Event',
-            scheduled_datetime=datetime.datetime.now(),
+            scheduled_datetime=datetime.datetime.now(tz=datetime.UTC),
             description='Test Description',
         )
         url = reverse('ticket-type-list', args=[event.id])
@@ -41,3 +69,6 @@ class EventsTestCase(APITestCase):
         }
         response = self.client.post(url, data)
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+
+    def test_create_ticket_order(self):
+        pass
