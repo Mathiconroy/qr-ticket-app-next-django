@@ -1,4 +1,4 @@
-import "./globals.css";
+import "@/app/globals.css";
 import { Inter } from "next/font/google";
 
 const inter = Inter({ subsets: ["latin"] });
@@ -13,7 +13,7 @@ export default function RootLayout({
       <head>
         <title>Ticketify</title>
       </head>
-      <body className={inter.className}>{children}</body>
+      <body className={`${inter.className} bg-neutral-100`}>{children}</body>
     </html>
   );
 }
