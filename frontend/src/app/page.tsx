@@ -1,5 +1,5 @@
 import Link from "next/link";
-import FormButton from "@/app/components/input/button";
+import FormButton from "@/components/input/button";
 
 export default function Home() {
   return (
