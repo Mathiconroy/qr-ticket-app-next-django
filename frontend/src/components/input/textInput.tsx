@@ -25,7 +25,7 @@ export default function FormInput({
           className={
             type !== "hidden" ? "block w-full rounded-lg border p-2" : ""
           }
-          value={value}
+          defaultValue={value}
         />
       ) : (
         <input
@@ -33,7 +33,7 @@ export default function FormInput({
           name={name}
           id={id}
           className="block w-full rounded-lg border p-2"
-          value={value}
+          defaultValue={value}
         />
       )}
     </div>

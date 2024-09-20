@@ -20,6 +20,7 @@ export interface TicketOrderDetail {
 }
 
 export interface TicketOrderHeader {
+  id: number;
   event: number;
   buyer: string;
   created_at: string;

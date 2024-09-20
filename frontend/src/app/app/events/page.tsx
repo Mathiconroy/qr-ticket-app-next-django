@@ -1,4 +1,4 @@
-import EventListGrid from "./eventListGrid";
+import EventListGrid from "@/app/components/eventListGrid";
 import Title from "@/app/components/display/title";
 import Link from "next/link";
 import FormButton from "@/app/components/input/button";

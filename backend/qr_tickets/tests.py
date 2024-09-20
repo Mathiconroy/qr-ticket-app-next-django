@@ -54,6 +54,10 @@ class EventsTestCase(APITestCase):
         self.assertEqual(response_patch.status_code, status.HTTP_200_OK)
         self.assertEqual(event_response['name'], 'Newer Event Name')
 
+        # Finally, test event retrieval
+        response_get = self.client.get(url, format='json')
+        self.assertEqual(response_get.status_code, status.HTTP_200_OK)
+
     def test_create_ticket_type(self):
         event = Event.objects.create(
             created_by=self.user,

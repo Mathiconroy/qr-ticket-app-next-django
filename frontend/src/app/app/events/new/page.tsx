@@ -5,7 +5,7 @@ export default function newEvent() {
   return (
     <div>
       <Title>Create event</Title>
-      <EventForm />
+      <EventForm mode={"create"} />
     </div>
   );
 }

@@ -44,10 +44,12 @@ class WhoAmI(APIView):
         })
 
 
-class EventList(mixins.ListModelMixin, mixins.CreateModelMixin, mixins.UpdateModelMixin, generics.GenericAPIView):
+class EventList(mixins.ListModelMixin, mixins.CreateModelMixin, mixins.UpdateModelMixin, mixins.RetrieveModelMixin, generics.GenericAPIView):
     serializer_class = EventSerializer
 
     def get(self, request, *args, **kwargs):
+        if kwargs.get('pk', None) is not None:
+            return self.retrieve(request, *args, **kwargs)
         return self.list(request, *args, **kwargs)
 
     def post(self, request, *args, **kwargs):

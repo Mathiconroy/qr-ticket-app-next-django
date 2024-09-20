@@ -1,28 +1,27 @@
 "use client";
+
 import InputButton from "@/app/components/input/button";
 import Card from "@/app/components/display/card";
 import CardGrid from "@/app/components/display/cardGrid";
 import axiosInstance from "@/app/axiosInstance";
 import { Event } from "@/app/interfaces/interfaces";
-import { useEffect, useState } from "react";
+import useSWR, { Fetcher } from "swr";
 import Link from "next/link";
 
-export default function EventListGrid() {
-  const [eventData, setEventData] = useState<Event[]>();
-  useEffect(() => {
-    async function fetchEventData() {
-      const eventResponse = await axiosInstance.get("events/");
-      setEventData(eventResponse.data);
-    }
+export default function EventListTable() {
+  const fetcher: Fetcher<Event[], string> = async (url: string) => {
+    const response = await axiosInstance.get(url);
+    return response.data;
+  };
+  const { data, error, isLoading } = useSWR("events/", fetcher);
 
-    fetchEventData();
-  }, []);
+  if (isLoading) return <div>Loading...</div>;
+  if (error) return <div>An error has occurred.</div>;
+
   return (
     <CardGrid>
-      {eventData !== undefined
-        ? eventData.map((event: Event) => (
-            <EventCard key={event.id} event={event} />
-          ))
+      {data !== undefined
+        ? data.map((event: Event) => <EventCard key={event.id} event={event} />)
         : ""}
     </CardGrid>
   );
@@ -47,11 +46,14 @@ function EventCard({ event }: { event: Event }) {
           <div className="">Tickets left:</div>
         </div>
         <div className={"flex items-center justify-end gap-2"}>
-          <Link href={`/app/events/${event.id}`}>
+          <Link href={`events/${event.id}/edit/`}>
             <InputButton text="Edit" />
           </Link>
-          <Link href={`/app/events/${event.id}`}>
-            <InputButton text="Details" />
+          <Link href={`events/${event.id}/ticketTypes/`}>
+            <InputButton text="Ticket types" />
+          </Link>
+          <Link href={`events/${event.id}/tickets/`}>
+            <InputButton text="Ticket orders" />
           </Link>
         </div>
       </div>

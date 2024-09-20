@@ -5,6 +5,8 @@ import axiosInstance from "@/app/axiosInstance";
 import FormInput from "@/app/components/input/textInput";
 import FormButton from "@/app/components/input/button";
 import axios from "axios";
+import useSWR, { Fetcher } from "swr";
+import { Event } from "@/app/interfaces/interfaces";
 
 // TODO: This should probably be moved because I'll definitely use this elsewhere lol.
 // This enum serves to give the classes to be used for each type of message.
@@ -40,9 +42,24 @@ interface MessageObject {
   messageType: MessageTypes;
 }
 
-export default function EventForm() {
+export default function EventForm({
+  mode,
+  eventId,
+}: {
+  mode: "edit" | "create";
+  eventId?: number;
+}) {
   const [messageObject, setMessageObject] = useState<MessageObject | null>(
     null,
+  );
+
+  const fetcher: Fetcher<Event, string> = async (url: string) => {
+    const response = await axiosInstance.get(url);
+    return response.data;
+  };
+  const { data } = useSWR<Event>(
+    mode === "edit" && eventId !== undefined ? `events/${eventId}/` : null,
+    fetcher,
   );
 
   async function handleSubmit(e: FormEvent) {
@@ -50,14 +67,24 @@ export default function EventForm() {
     const form = document.querySelector("#eventForm") as HTMLFormElement;
     const formData = new FormData(form);
     try {
-      const { data } = await axiosInstance.post("events/", formData);
-      setMessageObject({
-        message: "Event created successfully.",
-        messageType: MessageTypes.Success,
-      });
+      if (mode === "create") {
+        const { data } = await axiosInstance.post(`events/`, formData);
+        setMessageObject({
+          message: "Event edited successfully.",
+          messageType: MessageTypes.Success,
+        });
+      } else if (mode === "edit" && eventId !== undefined) {
+        const { data } = await axiosInstance.patch(
+          `events/${eventId}/`,
+          formData,
+        );
+        setMessageObject({
+          message: "Event created successfully.",
+          messageType: MessageTypes.Success,
+        });
+      }
     } catch (error) {
       if (axios.isAxiosError(error)) {
-        console.log(error.response?.data);
         setMessageObject({
           messages: error.response?.data,
           messageType: MessageTypes.Error,
@@ -66,18 +93,33 @@ export default function EventForm() {
     }
   }
 
+  // TODO: Figure out what the fuck to do with the dates.
   return (
     <div>
       {messageObject !== null ? (
         <Messages messageObject={messageObject}></Messages>
       ) : null}
       <form id="eventForm" onSubmit={(e) => handleSubmit(e)}>
-        <FormInput type="text" id="name" label="Name" name="name" />
         <FormInput
-          type="datetime-local"
+          type="text"
+          id="name"
+          label="Name"
+          name="name"
+          value={data !== undefined ? data.name : undefined}
+        />
+        <FormInput
+          type="date"
           label="Date"
           id="scheduled_datetime"
           name="scheduled_datetime"
+          value={"1995-12-17"}
+        />
+        <FormInput
+          type="time"
+          label="Time"
+          id="scheduled_datetime"
+          name="scheduled_datetime"
+          value={"15:24"}
         />
         <FormInput
           id="description"
