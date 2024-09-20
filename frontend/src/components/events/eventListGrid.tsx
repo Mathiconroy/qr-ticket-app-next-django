@@ -1,10 +1,10 @@
 "use client";
 
-import InputButton from "@/app/components/input/button";
-import Card from "@/app/components/display/card";
-import CardGrid from "@/app/components/display/cardGrid";
-import axiosInstance from "@/app/axiosInstance";
-import { Event } from "@/app/interfaces/interfaces";
+import InputButton from "@/components/input/button";
+import Card from "@/components/display/card";
+import CardGrid from "@/components/display/cardGrid";
+import axiosInstance from "@/axiosInstance";
+import { Event } from "@/interfaces/interfaces";
 import useSWR, { Fetcher } from "swr";
 import Link from "next/link";
 
