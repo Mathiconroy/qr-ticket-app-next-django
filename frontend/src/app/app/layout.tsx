@@ -1,8 +1,8 @@
-import { BsQrCodeScan, BsCalendarEvent } from "react-icons/bs";
-import Link from "next/link";
-import UserVerificator from "@/components/userVerificator";
-import UserInfoBanner from "@/components/userInfoBanner";
-import { ReactElement } from "react";
+import { BsQrCodeScan, BsCalendarEvent } from 'react-icons/bs';
+import Link from 'next/link';
+import UserVerificator from '@/components/userVerificator';
+import UserInfoBanner from '@/components/userInfoBanner';
+import { ReactElement } from 'react';
 
 interface Module {
   id: number;
@@ -18,23 +18,19 @@ interface ModuleObject {
 const modules: ModuleObject = {
   index: {
     id: 0,
-    name: "Dashboard",
-    route: "app/",
+    name: 'Dashboard',
+    route: 'app/',
     icon: <BsQrCodeScan size={20} className="mx-1 inline-block" />,
   },
   events: {
     id: 1,
-    name: "Events",
-    route: "events/",
+    name: 'Events',
+    route: 'events/',
     icon: <BsCalendarEvent size={20} className="mx-1 inline-block" />,
   },
 };
 
-export default function RootLayout({
-  children,
-}: {
-  children: React.ReactNode;
-}) {
+export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <>
       <UserVerificator />
@@ -47,7 +43,7 @@ export default function RootLayout({
             </Link>
           </div>
           <ul className="w-full px-4">
-            <SidebarItem module={modules["events"]} />
+            <SidebarItem module={modules['events']} />
           </ul>
         </div>
         <div className="col-span-5 row-span-1 bg-neutral-100">
@@ -56,9 +52,7 @@ export default function RootLayout({
           </div>
         </div>
         <div className="col-span-5 row-span-5 bg-neutral-100">
-          <div className="mx-4 rounded-lg border bg-white px-5 py-5 drop-shadow-md">
-            {children}
-          </div>
+          <div className="mx-4 rounded-lg border bg-white px-5 py-5 drop-shadow-md">{children}</div>
         </div>
       </div>
     </>

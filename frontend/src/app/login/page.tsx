@@ -1,8 +1,8 @@
-"use client";
+'use client';
 
-import { FormEvent, useState } from "react";
-import axiosInstance from "@/axiosInstance";
-import { useRouter } from "next/navigation";
+import { FormEvent, useState } from 'react';
+import axiosInstance from '@/axiosInstance';
+import { useRouter } from 'next/navigation';
 
 export default function Home() {
   const router = useRouter();
@@ -10,16 +10,16 @@ export default function Home() {
 
   const handleLogin = async (e: FormEvent) => {
     e.preventDefault();
-    const form = document.querySelector("#loginForm") as HTMLFormElement;
+    const form = document.querySelector('#loginForm') as HTMLFormElement;
     const formData = new FormData(form);
-    const res = await axiosInstance.post("/api-token-auth/", formData);
+    const res = await axiosInstance.post('/api-token-auth/', formData);
     if (res.status >= 200 && res.status <= 299) {
-      router.push("/app");
+      router.push('/app');
     }
   };
 
   const handleWhoAmI = async () => {
-    const res = await axiosInstance.get("/whoami/");
+    const res = await axiosInstance.get('/whoami/');
     setWhoAmI(res.data.username);
   };
 
@@ -42,10 +42,7 @@ export default function Home() {
             className="block w-full border-2 rounded-lg border-gray-200 mt-5 py-4 px-3"
             placeholder="Password"
           />
-          <button
-            type="submit"
-            className="mt-5 w-full rounded-md bg-blue-400 p-2"
-          >
+          <button type="submit" className="mt-5 w-full rounded-md bg-blue-400 p-2">
             Log In
           </button>
           <p className="pt-3 text-center">New to Ticketify? Sign up.</p>

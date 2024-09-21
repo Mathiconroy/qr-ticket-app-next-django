@@ -1,8 +1,8 @@
 export default function FormInput({
   name,
   id,
-  type = "text",
-  label = "",
+  type = 'text',
+  label = '',
   isTextarea = false,
   value,
 }: {
@@ -15,16 +15,14 @@ export default function FormInput({
 }) {
   return (
     <div>
-      <label htmlFor={id} className={type !== "hidden" ? "block py-2" : ""}>
+      <label htmlFor={id} className={type !== 'hidden' ? 'block py-2' : ''}>
         {label}
       </label>
       {isTextarea ? (
         <textarea
           name={name}
           id={id}
-          className={
-            type !== "hidden" ? "block w-full rounded-lg border p-2" : ""
-          }
+          className={type !== 'hidden' ? 'block w-full rounded-lg border p-2' : ''}
           defaultValue={value}
         />
       ) : (
