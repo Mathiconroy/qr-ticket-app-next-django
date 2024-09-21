@@ -16,12 +16,12 @@ export default function Home() {
     if (res.status >= 200 && res.status <= 299) {
       router.push("/app");
     }
-  }
+  };
 
   const handleWhoAmI = async () => {
     const res = await axiosInstance.get("/whoami/");
-    setWhoAmI(res.data.username)
-  }
+    setWhoAmI(res.data.username);
+  };
 
   return (
     <div className="grid h-screen grid-cols-1 place-items-center">
