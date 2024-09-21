@@ -2,28 +2,52 @@
 
 import InputButton from "@/components/input/button";
 import Card from "@/components/display/card";
-import CardGrid from "@/components/display/cardGrid";
 import axiosInstance from "@/axiosInstance";
 import { Event } from "@/interfaces/interfaces";
 import useSWR, { Fetcher } from "swr";
 import Link from "next/link";
+import { BsPencilSquare, BsSearch } from "react-icons/bs";
 
 export default function EventListTable() {
   const fetcher: Fetcher<Event[], string> = async (url: string) => {
     const response = await axiosInstance.get(url);
     return response.data;
   };
-  const { data, error, isLoading } = useSWR("events/", fetcher);
+  const { data, error, isLoading } = useSWR<Event[]>("events/", fetcher);
 
   if (isLoading) return <div>Loading...</div>;
-  if (error) return <div>An error has occurred.</div>;
+  if (error) return <div>An error has occurred.</div>
 
   return (
-    <CardGrid>
-      {data !== undefined
-        ? data.map((event: Event) => <EventCard key={event.id} event={event} />)
-        : ""}
-    </CardGrid>
+    <table className={"table-auto w-full"}>
+      <thead className={"border-b"}>
+        <tr className={"text-left"}>
+          <th>Name</th>
+          <th>Date</th>
+          <th>Details</th>
+          <th>Edit</th>
+        </tr>
+      </thead>
+      <tbody>
+        {data !== undefined &&
+          data.map((event) => (
+            <tr key={event.id} className={"border-b"}>
+              <td>{event.name}</td>
+              <td>{event.scheduled_datetime}</td>
+              <td>
+                <button className={"p-2"}>
+                  <BsSearch />
+                </button>
+              </td>
+              <td>
+                <button className={"p-2"}>
+                  <BsPencilSquare />
+                </button>
+              </td>
+            </tr>
+          ))}
+      </tbody>
+    </table>
   );
 }
 
