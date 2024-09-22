@@ -1,54 +1,43 @@
-'use client';
+import { useRef, useState } from 'react';
+import { createPortal } from 'react-dom';
 
-import { useContext, useRef, useState } from 'react';
-import { ModalContext } from '@/components/modal/ModalContext';
-
-export function Modal() {
-  const { isOpen, onClose } = useModalContext();
+export function Modal({
+  isOpen,
+  onClose,
+  onOpen,
+  children,
+}: {
+  isOpen: boolean;
+  onClose: () => void;
+  onOpen: () => void;
+  children: React.ReactNode;
+}) {
   const dialogRef = useRef<HTMLDialogElement | null>(null);
-  if (isOpen) {
-    return (
-      <dialog
-        open
-        className={'grid backdrop-blur bg-transparent z-50 w-screen h-screen place-items-center'}
-        ref={dialogRef}
-        onMouseDown={(e) => {
-          if (dialogRef.current !== null && e.target === dialogRef.current) {
-            onClose();
-          }
-        }}
-      >
-        <div className={'container text-center bg-orange-500 rounded-lg'}>Hello</div>
-      </dialog>
-    );
-  } else {
-    return null;
-  }
-}
-
-export function ModalProvider({ children }: { children: React.ReactNode }) {
-  const [isOpen, setIsOpen] = useState(false);
-  const onOpen = () => setIsOpen(true);
-  const onClose = () => setIsOpen(false);
-  const onToggle = () => setIsOpen(!isOpen);
-  return (
-    <ModalContext.Provider
-      value={{
-        isOpen: isOpen,
-        onOpen: onOpen,
-        onClose: onClose,
-        onToggle: onToggle,
+  return createPortal(
+    <dialog
+      open
+      className={
+        'fixed text-center top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 container bg-white z-50'
+      }
+      ref={dialogRef}
+      onMouseDown={(e) => {
+        if (dialogRef.current !== null && e.target === dialogRef.current) {
+          onClose();
+        }
       }}
     >
       {children}
-    </ModalContext.Provider>
+    </dialog>,
+    document.body,
   );
 }
 
-export const useModalContext = () => {
-  const modalContext = useContext(ModalContext);
-  if (modalContext === undefined) {
-    throw new Error('useModalContext must be inside a ModalProvider.');
-  }
-  return modalContext;
+export const useModal = () => {
+  const [isOpen, setIsOpen] = useState<Boolean>(false);
+  return {
+    isOpen: isOpen,
+    onOpen: () => setIsOpen(true),
+    onClose: () => setIsOpen(false),
+    onToggle: () => setIsOpen(!isOpen),
+  };
 };
