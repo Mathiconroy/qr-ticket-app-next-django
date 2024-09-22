@@ -9,7 +9,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       <head>
         <title>Ticketify</title>
       </head>
-      <body className={`${inter.className} bg-neutral-100`}>{children}</body>
+      <body className={`${inter.className} bg-neutral-100 w-full h-full`}>{children}</body>
     </html>
   );
 }

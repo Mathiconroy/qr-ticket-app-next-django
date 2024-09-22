@@ -7,6 +7,7 @@ import { Event } from '@/interfaces/interfaces';
 import useSWR, { Fetcher } from 'swr';
 import Link from 'next/link';
 import { BsPencilSquare, BsSearch } from 'react-icons/bs';
+import { useModalContext } from '@/components/modal/Modal';
 
 export default function EventListTable() {
   const fetcher: Fetcher<Event[], string> = async (url: string) => {
@@ -14,6 +15,7 @@ export default function EventListTable() {
     return response.data;
   };
   const { data, error, isLoading } = useSWR<Event[]>('events/', fetcher);
+  const { onOpen } = useModalContext();
 
   if (isLoading) return <div>Loading...</div>;
   if (error) return <div>An error has occurred.</div>;
@@ -35,7 +37,7 @@ export default function EventListTable() {
               <td>{event.name}</td>
               <td>{event.scheduled_datetime}</td>
               <td>
-                <button className={'p-2'}>
+                <button onClick={onOpen} className={'p-2'}>
                   <BsSearch />
                 </button>
               </td>
