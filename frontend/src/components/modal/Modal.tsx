@@ -11,22 +11,23 @@ export function Modal({
   onClose: () => void;
   children: React.ReactNode;
 }) {
-  // TODO: Figure out why the backdrop doesn't work.
   const dialogRef = useRef<HTMLDivElement | null>(null);
   if (isOpen) {
     return createPortal(
       <div
         className={
-          'fixed py-4 backdrop-blur-md bg-white text-center top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 container z-50'
+          'fixed flex justify-center items-center backdrop-blur-md w-screen h-screen top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2  z-50'
         }
         ref={dialogRef}
       >
-        <div className={'flex absolute top-0 right-0 justify-end'}>
-          <button onClick={onClose}>
-            <BsX size={40} />
-          </button>
+        <div className={'bg-white h-fit py-4 text-center rounded-xl relative container'}>
+          <div className={'flex absolute top-0 right-0 justify-end'}>
+            <button onClick={onClose}>
+              <BsX size={40} />
+            </button>
+          </div>
+          {children}
         </div>
-        {children}
       </div>,
       document.body,
     );
