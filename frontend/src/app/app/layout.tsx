@@ -32,7 +32,7 @@ const modules: ModuleObject = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <>
+    <div id={'root-layout'}>
       <UserVerificator />
       <div className="grid h-screen grid-cols-6 grid-rows-6 text-neutral-500 md:text-lg">
         <div className="col-span-1 row-span-6 bg-white">
@@ -55,7 +55,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           <div className="mx-4 rounded-lg border bg-white px-5 py-5 drop-shadow-md">{children}</div>
         </div>
       </div>
-    </>
+    </div>
   );
 }
 

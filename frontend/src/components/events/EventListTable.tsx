@@ -7,7 +7,9 @@ import { Event } from '@/interfaces/interfaces';
 import useSWR, { Fetcher } from 'swr';
 import Link from 'next/link';
 import { BsPencilSquare, BsSearch } from 'react-icons/bs';
-import { useModal } from '@/components/modal/Modal';
+import { Modal, useModal } from '@/components/modal/Modal';
+import { useState } from 'react';
+import { EventDetailModal } from '@/components/events/EventDetailModal';
 
 export default function EventListTable() {
   const fetcher: Fetcher<Event[], string> = async (url: string) => {
@@ -16,40 +18,54 @@ export default function EventListTable() {
   };
   const { data, error, isLoading } = useSWR<Event[]>('events/', fetcher);
   const { isOpen, onOpen, onClose } = useModal();
+  const [selectedEvent, setSelectedEvent] = useState<Event>();
 
   if (isLoading) return <div>Loading...</div>;
   if (error) return <div>An error has occurred.</div>;
 
   return (
-    <table className={'table-auto w-full'}>
-      <thead className={'border-b'}>
-        <tr className={'text-left'}>
-          <th>Name</th>
-          <th>Date</th>
-          <th>Details</th>
-          <th>Edit</th>
-        </tr>
-      </thead>
-      <tbody>
-        {data !== undefined &&
-          data.map((event) => (
-            <tr key={event.id} className={'border-b'}>
-              <td>{event.name}</td>
-              <td>{event.scheduled_datetime}</td>
-              <td>
-                <button onClick={onOpen} className={'p-2'}>
-                  <BsSearch />
-                </button>
-              </td>
-              <td>
-                <button className={'p-2'}>
-                  <BsPencilSquare />
-                </button>
-              </td>
-            </tr>
-          ))}
-      </tbody>
-    </table>
+    <>
+      {selectedEvent !== undefined && (
+        <Modal isOpen={isOpen} onClose={onClose}>
+          <EventDetailModal event={selectedEvent} />
+        </Modal>
+      )}
+      <table className={'table-auto w-full'}>
+        <thead className={'border-b'}>
+          <tr className={'text-left'}>
+            <th>Name</th>
+            <th>Date</th>
+            <th>Details</th>
+            <th>Edit</th>
+          </tr>
+        </thead>
+        <tbody>
+          {data !== undefined &&
+            data.map((event) => (
+              <tr key={event.id} className={'border-b'}>
+                <td>{event.name}</td>
+                <td>{event.scheduled_datetime}</td>
+                <td>
+                  <button
+                    onClick={() => {
+                      onOpen();
+                      setSelectedEvent(event);
+                    }}
+                    className={'p-2'}
+                  >
+                    <BsSearch />
+                  </button>
+                </td>
+                <td>
+                  <button className={'p-2'}>
+                    <BsPencilSquare />
+                  </button>
+                </td>
+              </tr>
+            ))}
+        </tbody>
+      </table>
+    </>
   );
 }
 
