@@ -1,5 +1,6 @@
 import { useRef, useState } from 'react';
 import { createPortal } from 'react-dom';
+import { BsX } from 'react-icons/bs';
 
 export function Modal({
   isOpen,
@@ -10,25 +11,23 @@ export function Modal({
   onClose: () => void;
   children: React.ReactNode;
 }) {
-  const dialogRef = useRef<HTMLDialogElement | null>(null);
+  // TODO: Figure out why the backdrop doesn't work.
+  const dialogRef = useRef<HTMLDivElement | null>(null);
   if (isOpen) {
     return createPortal(
-      <dialog
-        open
+      <div
         className={
-          'fixed backdrop-blur-md text-center top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 container bg-white z-50'
+          'fixed py-4 backdrop-blur-md bg-white text-center top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 container z-50'
         }
         ref={dialogRef}
-        onMouseDown={(e) => {
-          if (dialogRef.current !== null && e.target === dialogRef.current) {
-            console.log('Clicked inside modal.');
-            onClose();
-          }
-        }}
       >
+        <div className={'flex absolute top-0 right-0 justify-end'}>
+          <button onClick={onClose}>
+            <BsX size={40} />
+          </button>
+        </div>
         {children}
-        <button onClick={onClose}>Close</button>
-      </dialog>,
+      </div>,
       document.body,
     );
   } else {
