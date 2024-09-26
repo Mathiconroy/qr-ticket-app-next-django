@@ -1,4 +1,4 @@
-import { useRef, useState } from 'react';
+import { useEffect, useLayoutEffect, useRef, useState } from 'react';
 import { createPortal } from 'react-dom';
 import { BsX } from 'react-icons/bs';
 
@@ -11,29 +11,45 @@ export function Modal({
   onClose: () => void;
   children: React.ReactNode;
 }) {
-  const dialogRef = useRef<HTMLDivElement | null>(null);
-  if (isOpen) {
-    return createPortal(
-      <div
-        className={
-          'fixed flex justify-center items-center backdrop-blur-md w-screen h-screen top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2  z-50'
+  const dialogRef = useRef<HTMLDialogElement | null>(null);
+  useEffect(() => {
+    if (dialogRef.current !== null) {
+      if (isOpen) {
+        dialogRef.current.showModal();
+      } else {
+        dialogRef.current.close();
+      }
+    }
+  }, [isOpen]);
+  return (
+    <dialog
+      className={'container rounded-xl'}
+      ref={dialogRef}
+      onClick={(event) => {
+        if (dialogRef.current !== null) {
+          const rect = dialogRef.current.getBoundingClientRect();
+          const isInDialog =
+            rect.top <= event.clientY &&
+            event.clientY <= rect.top + rect.height &&
+            rect.left <= event.clientX &&
+            event.clientX <= rect.left + rect.width;
+          if (!isInDialog) {
+            dialogRef.current.close();
+            onClose();
+          }
         }
-        ref={dialogRef}
-      >
-        <div className={'bg-white h-fit py-4 text-center rounded-xl relative container'}>
-          <div className={'flex absolute top-0 right-0 justify-end'}>
-            <button onClick={onClose}>
-              <BsX size={40} />
-            </button>
-          </div>
-          {children}
+      }}
+    >
+      <div className={'bg-white py-4 text-center relative'}>
+        <div className={'flex absolute top-0 right-0 justify-end'}>
+          <button onClick={onClose}>
+            <BsX size={40} />
+          </button>
         </div>
-      </div>,
-      document.body,
-    );
-  } else {
-    return null;
-  }
+        {children}
+      </div>
+    </dialog>
+  );
 }
 
 export const useModal = () => {
