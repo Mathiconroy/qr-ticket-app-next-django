@@ -25,7 +25,7 @@ export default function EventListTable() {
   const [selectedEvent, setSelectedEvent] = useState<Event>();
   const [modalMode, setModalMode] = useState<'OFF' | 'CREATE' | 'DETAIL' | 'EDIT'>('OFF');
 
-  const getModalContenet = () => {
+  const getModalContent = () => {
     if (modalMode === 'OFF') {
       return null;
     } else if (modalMode === 'DETAIL' && selectedEvent !== undefined) {
@@ -46,7 +46,7 @@ export default function EventListTable() {
     <>
       {selectedEvent !== undefined && (
         <Modal isOpen={isOpen} onClose={onClose}>
-          {getModalContenet()}
+          {getModalContent()}
         </Modal>
       )}
       <table className={'table-auto w-full'}>
