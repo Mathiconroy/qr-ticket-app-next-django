@@ -9,7 +9,11 @@ import Link from 'next/link';
 import { BsPencilSquare, BsSearch } from 'react-icons/bs';
 import { Modal, useModal } from '@/components/modal/Modal';
 import { useState } from 'react';
-import { EventDetailModal } from '@/components/events/EventDetailModal';
+import {
+  EventDetailModal,
+  EventCreateModal,
+  EventEditModal,
+} from '@/components/events/EventModals';
 
 export default function EventListTable() {
   const fetcher: Fetcher<Event[], string> = async (url: string) => {
@@ -19,6 +23,21 @@ export default function EventListTable() {
   const { data, error, isLoading } = useSWR<Event[]>('events/', fetcher);
   const { isOpen, onOpen, onClose } = useModal();
   const [selectedEvent, setSelectedEvent] = useState<Event>();
+  const [modalMode, setModalMode] = useState<'OFF' | 'CREATE' | 'DETAIL' | 'EDIT'>('OFF');
+
+  const getModalContenet = () => {
+    if (modalMode === 'OFF') {
+      return null;
+    } else if (modalMode === 'DETAIL' && selectedEvent !== undefined) {
+      return <EventDetailModal event={selectedEvent} />;
+    } else if (modalMode === 'CREATE') {
+      return <EventCreateModal />;
+    } else if (modalMode === 'EDIT' && selectedEvent !== undefined) {
+      return <EventEditModal event={selectedEvent} />;
+    } else {
+      return null;
+    }
+  };
 
   if (isLoading) return <div>Loading...</div>;
   if (error) return <div>An error has occurred.</div>;
@@ -27,7 +46,7 @@ export default function EventListTable() {
     <>
       {selectedEvent !== undefined && (
         <Modal isOpen={isOpen} onClose={onClose}>
-          <EventDetailModal event={selectedEvent} />
+          {getModalContenet()}
         </Modal>
       )}
       <table className={'table-auto w-full'}>
@@ -49,6 +68,7 @@ export default function EventListTable() {
                   <button
                     onClick={() => {
                       onOpen();
+                      setModalMode('DETAIL');
                       setSelectedEvent(event);
                     }}
                     className={'p-2'}
