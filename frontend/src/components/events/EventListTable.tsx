@@ -7,7 +7,14 @@ import axiosInstance from '@/axiosInstance';
 import { Event } from '@/interfaces/interfaces';
 import useSWR, { Fetcher } from 'swr';
 import Link from 'next/link';
-import { BsPencilSquare, BsReceipt, BsSearch, BsTicket } from 'react-icons/bs';
+import {
+  BsChevronLeft,
+  BsChevronRight,
+  BsPencilSquare,
+  BsReceipt,
+  BsSearch,
+  BsTicket,
+} from 'react-icons/bs';
 import { Modal, useModal } from '@/components/modal/Modal';
 import { useState } from 'react';
 import {
@@ -51,6 +58,11 @@ export default function EventListTable() {
         </Modal>
       )}
       <table className={'table-auto w-full'}>
+        <caption className={'caption-bottom'}>
+          <IconButton icon={<BsChevronLeft size={20} />} />
+          <IconButton icon={<BsChevronRight size={20} />} />
+        </caption>
+
         <thead className={'border-b'}>
           <tr className={'text-left'}>
             <th>Name</th>
