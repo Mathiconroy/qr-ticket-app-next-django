@@ -1,7 +1,7 @@
 import EventListGrid from '@/components/events/EventListTable';
 import Title from '@/components/display/title';
 import Link from 'next/link';
-import FormButton from '@/components/input/button';
+import FormButton from '@/components/input/button/FormButton';
 
 export default function EventList() {
   return (

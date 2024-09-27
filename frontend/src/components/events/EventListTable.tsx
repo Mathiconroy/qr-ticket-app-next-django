@@ -1,12 +1,13 @@
 'use client';
 
-import InputButton from '@/components/input/button';
+import FormButton from '@/components/input/button/FormButton';
+import IconButton from '@/components/input/button/IconButton';
 import Card from '@/components/display/card';
 import axiosInstance from '@/axiosInstance';
 import { Event } from '@/interfaces/interfaces';
 import useSWR, { Fetcher } from 'swr';
 import Link from 'next/link';
-import { BsPencilSquare, BsSearch } from 'react-icons/bs';
+import { BsPencilSquare, BsReceipt, BsSearch, BsTicket } from 'react-icons/bs';
 import { Modal, useModal } from '@/components/modal/Modal';
 import { useState } from 'react';
 import {
@@ -56,6 +57,8 @@ export default function EventListTable() {
             <th>Date</th>
             <th>Details</th>
             <th>Edit</th>
+            <th>Tickets</th>
+            <th>Orders</th>
           </tr>
         </thead>
         <tbody>
@@ -77,9 +80,13 @@ export default function EventListTable() {
                   </button>
                 </td>
                 <td>
-                  <button className={'p-2'}>
-                    <BsPencilSquare />
-                  </button>
+                  <IconButton icon={<BsPencilSquare />} />
+                </td>
+                <td>
+                  <IconButton icon={<BsTicket />} />
+                </td>
+                <td>
+                  <IconButton icon={<BsReceipt />} />
                 </td>
               </tr>
             ))}
@@ -109,13 +116,13 @@ function EventCard({ event }: { event: Event }) {
         </div>
         <div className={'flex items-center justify-end gap-2'}>
           <Link href={`events/${event.id}/edit/`}>
-            <InputButton text="Edit" />
+            <FormButton text="Edit" />
           </Link>
           <Link href={`events/${event.id}/ticketTypes/`}>
-            <InputButton text="Ticket types" />
+            <FormButton text="Ticket types" />
           </Link>
           <Link href={`events/${event.id}/tickets/`}>
-            <InputButton text="Ticket orders" />
+            <FormButton text="Ticket orders" />
           </Link>
         </div>
       </div>
