@@ -1,3 +1,5 @@
+import { Key } from 'react';
+
 export interface TicketType {
   id: number;
   name: string;
@@ -26,4 +28,12 @@ export interface TicketOrderHeader {
   created_at: string;
   qr_svg: string;
   tickets: TicketOrderDetail[];
+}
+
+export interface PaginationResponse<T> {
+  id: Key;
+  count: number;
+  next: string | null;
+  previous: string | null;
+  results: T[];
 }
