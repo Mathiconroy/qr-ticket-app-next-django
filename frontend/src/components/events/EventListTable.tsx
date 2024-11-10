@@ -57,9 +57,7 @@ export default function EventListTable() {
     if (previousUrlString !== null && previousUrlString !== undefined) {
       const previousUrl = new URL(previousUrlString);
       const previousPage = previousUrl.searchParams.get('page');
-      if (previousPage !== null) {
-        setPageNumber(previousPage);
-      }
+      setPageNumber(previousPage ?? '1');
     }
   };
   const getModalContent = () => {
