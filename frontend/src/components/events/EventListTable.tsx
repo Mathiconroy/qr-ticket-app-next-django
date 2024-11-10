@@ -15,15 +15,16 @@ import {
   BsPencilSquare,
   BsReceipt,
   BsSearch,
-  BsTicket,
+  BsTicket
 } from 'react-icons/bs';
 import { Modal, useModal } from '@/components/modal/Modal';
 import { useState } from 'react';
 import {
   EventDetailModal,
   EventCreateModal,
-  EventEditModal,
+  EventEditModal
 } from '@/components/events/EventModals';
+import { Button } from '../ui/button';
 
 export default function EventListTable() {
   const fetcher: Fetcher<PaginationResponse<Event>, string> = async (url: string) => {
@@ -33,7 +34,7 @@ export default function EventListTable() {
   const [pageNumber, setPageNumber] = useState('1');
   const { data, error, isLoading } = useSWR<PaginationResponse<Event>>(
     `/events/?page=${pageNumber}`,
-    fetcher,
+    fetcher
   );
   const { isOpen, onOpen, onClose } = useModal();
   const [selectedEvent, setSelectedEvent] = useState<Event>();
@@ -122,16 +123,11 @@ export default function EventListTable() {
               <td>{event.name}</td>
               <td>{event.scheduled_datetime}</td>
               <td>
-                <button
-                  onClick={() => {
-                    onOpen();
-                    setModalMode('DETAIL');
-                    setSelectedEvent(event);
-                  }}
-                  className={'p-2'}
-                >
-                  <BsSearch />
-                </button>
+                <Button variant={'ghost'} asChild>
+                  <Link href={`/app/events/${event.id}`}>
+                    <BsSearch />
+                  </Link>
+                </Button>
               </td>
               <td>
                 <IconButton icon={<BsPencilSquare />} />
