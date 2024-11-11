@@ -1,22 +1,15 @@
 'use client';
 
-import axiosInstance from '@/axiosInstance';
-import { useState, useEffect } from 'react';
-import { TicketType } from '@/interfaces/interfaces';
 import EventDetail from '@/components/events/detail/EventDetail';
+import useSWR from 'swr';
 
 export default function EventDetails({ params }: { params: { id: number } }) {
-  const [ticketTypeData, setTicketTypeData] = useState<TicketType[]>();
-  useEffect(() => {
-    async function fetchTicketTypeData() {
-      const eventResponse = await axiosInstance.get(`events/${params.id}/ticketTypes/`);
-      setTicketTypeData(eventResponse.data);
-    }
-    fetchTicketTypeData();
-  }, [params.id]);
+  const { data: ticketTypesData } = useSWR(`/events/${params.id}/ticketTypes/`);
+  const { data: ticketsData } = useSWR(`/events/${params.id}/tickets/`);
+
   return (
     <>
-      <EventDetail />
+      <EventDetail ticketTypes={ticketTypesData} tickets={ticketsData} />
     </>
   );
 }
