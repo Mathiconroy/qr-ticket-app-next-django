@@ -1,6 +1,7 @@
 from django.core import signing
 from rest_framework.authtoken.views import ObtainAuthToken
 from rest_framework.authtoken.models import Token
+from rest_framework.pagination import PageNumberPagination
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from django.contrib.auth import authenticate, login
@@ -44,8 +45,15 @@ class WhoAmI(APIView):
         })
 
 
+class MyCustomPagination(PageNumberPagination):
+    page_size = 10
+    page_size_query_param = 'page_size'
+    max_page_size = 10
+
+# TODO: Pagination.
 class EventList(mixins.ListModelMixin, mixins.CreateModelMixin, mixins.UpdateModelMixin, mixins.RetrieveModelMixin, generics.GenericAPIView):
     serializer_class = EventSerializer
+    pagination_class = MyCustomPagination
 
     def get(self, request, *args, **kwargs):
         if kwargs.get('pk', None) is not None:
