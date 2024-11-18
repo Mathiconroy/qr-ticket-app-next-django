@@ -5,8 +5,16 @@ import {
   AccordionTrigger
 } from '@/components/ui/accordion';
 import { Button } from '@/components/ui/button';
-import { Event, TicketOrderDetail, TicketType } from '@/interfaces/interfaces';
+import { TicketOrderDetail, TicketType } from '@/interfaces/interfaces';
 import { MoveLeft } from 'lucide-react';
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow
+} from '@/components/ui/table';
 import Link from 'next/link';
 
 export default function EventDetail({
@@ -26,11 +34,37 @@ export default function EventDetail({
       <Accordion type={'single'} collapsible>
         <AccordionItem value={'ticket-types'}>
           <AccordionTrigger>Ticket Types</AccordionTrigger>
-          <AccordionContent>INSERT TICKET TYPES TABLE HERE</AccordionContent>
+          <AccordionContent className={'pb-0'}>
+            <Table>
+              <TableHeader>
+                <TableRow>
+                  <TableHead>Name</TableHead>
+                  <TableHead>Price</TableHead>
+                </TableRow>
+              </TableHeader>
+              <TableBody>
+                {ticketTypes?.map((ticketType) => (
+                  <TableRow>
+                    <TableCell>{ticketType.name}</TableCell>
+                    <TableCell>{ticketType.price}</TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+          </AccordionContent>
         </AccordionItem>
         <AccordionItem value={'tickets'}>
-          <AccordionTrigger>Tickets</AccordionTrigger>
-          <AccordionContent>INSERT TICKET TABLE HERE</AccordionContent>
+          <AccordionTrigger>Ticket Orders</AccordionTrigger>
+          <AccordionContent>
+            <Table>
+              <TableHeader>
+                <TableRow>
+                  <TableHead>Name</TableHead>
+                  <TableHead>Price</TableHead>
+                </TableRow>
+              </TableHeader>
+            </Table>
+          </AccordionContent>
         </AccordionItem>
       </Accordion>
     </>
