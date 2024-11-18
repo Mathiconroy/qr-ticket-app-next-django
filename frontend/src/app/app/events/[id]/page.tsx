@@ -8,6 +8,6 @@ export default function EventDetails({ params }: { params: { id: number } }) {
   const { data: ticketOrdersData } = useTicketOrders(params.id);
 
   return ticketTypesData === undefined || ticketOrdersData === undefined ? null : (
-    <EventDetail ticketTypes={ticketTypesData} tickets={ticketOrdersData} />
+    <EventDetail ticketTypes={ticketTypesData} ticketOrders={ticketOrdersData} />
   );
 }
