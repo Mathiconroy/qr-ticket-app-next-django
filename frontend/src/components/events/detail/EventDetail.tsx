@@ -5,7 +5,7 @@ import {
   AccordionTrigger
 } from '@/components/ui/accordion';
 import { Button } from '@/components/ui/button';
-import { TicketOrderDetail, TicketType } from '@/interfaces/interfaces';
+import { TicketOrderDetail, TicketOrderHeader, TicketType } from '@/interfaces/interfaces';
 import { MoveLeft } from 'lucide-react';
 import {
   Table,
@@ -19,10 +19,10 @@ import Link from 'next/link';
 
 export default function EventDetail({
   ticketTypes,
-  tickets
+  ticketOrders
 }: {
   ticketTypes: TicketType[];
-  tickets: TicketOrderDetail[];
+  ticketOrders: TicketOrderHeader[];
 }) {
   return (
     <>
@@ -43,7 +43,7 @@ export default function EventDetail({
                 </TableRow>
               </TableHeader>
               <TableBody>
-                {ticketTypes?.map((ticketType) => (
+                {ticketTypes.map((ticketType) => (
                   <TableRow>
                     <TableCell>{ticketType.name}</TableCell>
                     <TableCell>{ticketType.price}</TableCell>
@@ -59,10 +59,19 @@ export default function EventDetail({
             <Table>
               <TableHeader>
                 <TableRow>
-                  <TableHead>Name</TableHead>
-                  <TableHead>Price</TableHead>
+                  <TableHead>Buyer</TableHead>
+                  <TableHead>Bought at</TableHead>
+                  <TableHead>Details</TableHead>
                 </TableRow>
               </TableHeader>
+              <TableBody>
+                {ticketOrders.map((ticketOrder) => (
+                  <TableRow>
+                    <TableCell>{ticketOrder.buyer}</TableCell>
+                    <TableCell>{new Date(ticketOrder.created_at).toLocaleString()}</TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
             </Table>
           </AccordionContent>
         </AccordionItem>
