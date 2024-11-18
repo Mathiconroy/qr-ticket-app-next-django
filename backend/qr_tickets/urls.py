@@ -5,7 +5,7 @@ from rest_framework.authtoken import views
 
 # TODO: Figure out how this works.
 router = SimpleRouter()
-router.register(r'events/(?P<event_id>[0-9]+)/tickets', TicketOrderViewSet, 'ticket_order')
+router.register(r'events/(?P<event_id>[0-9]+)/ticketOrders', TicketOrderViewSet, 'ticket_order')
 
 urlpatterns = [
     path("api-token-auth/", CustomAuthToken.as_view()),
@@ -14,7 +14,7 @@ urlpatterns = [
     path("events/", EventList.as_view(), name="event-list"),
     path("events/<int:pk>/", EventList.as_view(), name="event-detail"),
     path("events/<int:event_id>/ticketTypes/", TicketTypeList.as_view(), name="ticket-type-list"),
-    path("tickets/redeem/<str:qr_key>/", RedeemTicketView.as_view(), name="redeem-ticket")
+    path("tickets/redeem/<str:qr_key>/", RedeemTicketView.as_view(), name="redeem-ticket"),
 ]
 
 urlpatterns += router.urls
