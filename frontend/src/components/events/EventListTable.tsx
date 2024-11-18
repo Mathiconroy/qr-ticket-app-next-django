@@ -24,7 +24,7 @@ import {
   EventCreateModal,
   EventEditModal
 } from '@/components/events/EventModals';
-import { Button } from '../ui/button';
+import { Button } from '@/components/ui/button';
 
 export default function EventListTable() {
   const fetcher: Fetcher<PaginationResponse<Event>, string> = async (url: string) => {
@@ -87,7 +87,7 @@ export default function EventListTable() {
       )}
       <table className={'table-auto w-full'}>
         <caption className={'caption-bottom'}>
-          <div className={'mt-4'}>
+          <div className={'flex justify-center content-center mt-4 text-xl'}>
             <IconButton
               onClick={() => handleFirstPage()}
               icon={<BsChevronDoubleLeft size={20} />}
@@ -96,6 +96,7 @@ export default function EventListTable() {
               onClick={() => handlePreviousPage(data?.previous)}
               icon={<BsChevronLeft size={20} />}
             />
+            {pageNumber}
             <IconButton
               onClick={() => handleNextPage(data?.next)}
               icon={<BsChevronRight size={20} />}
