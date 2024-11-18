@@ -16,6 +16,9 @@ import {
   TableRow
 } from '@/components/ui/table';
 import Link from 'next/link';
+import { useModal } from '@/hooks/modalHooks';
+import { Dialog, DialogContent } from '@/components/ui/dialog';
+import { useState } from 'react';
 
 export default function EventDetail({
   ticketTypes,
@@ -24,8 +27,13 @@ export default function EventDetail({
   ticketTypes: TicketType[];
   ticketOrders: TicketOrderHeader[];
 }) {
+  const { isOpen, openModal, closeModal } = useModal();
+  const [selectedOrder, setSelectedOrder] = useState<TicketOrderHeader>();
   return (
     <>
+      <Dialog open={isOpen}>
+        <DialogContent>{selectedOrder !== undefined ? null : null}</DialogContent>
+      </Dialog>
       <Button asChild>
         <Link href={'/app/events'}>
           <MoveLeft /> Go back
@@ -69,6 +77,16 @@ export default function EventDetail({
                   <TableRow>
                     <TableCell>{ticketOrder.buyer}</TableCell>
                     <TableCell>{new Date(ticketOrder.created_at).toLocaleString()}</TableCell>
+                    <TableCell>
+                      <Button
+                        onClick={() => {
+                          setSelectedOrder(ticketOrder);
+                          openModal();
+                        }}
+                      >
+                        Details
+                      </Button>
+                    </TableCell>
                   </TableRow>
                 ))}
               </TableBody>
