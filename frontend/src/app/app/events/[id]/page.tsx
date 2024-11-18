@@ -1,15 +1,13 @@
 'use client';
 
 import EventDetail from '@/components/events/detail/EventDetail';
-import useSWR from 'swr';
+import { useTicketOrders, useTicketTypes } from '@/hooks/fetchHooks';
 
 export default function EventDetails({ params }: { params: { id: number } }) {
-  const { data: ticketTypesData } = useSWR(`/events/${params.id}/ticketTypes/`);
-  const { data: ticketsData } = useSWR(`/events/${params.id}/tickets/`);
+  const { data: ticketTypesData } = useTicketTypes(params.id);
+  const { data: ticketOrdersData } = useTicketOrders(params.id);
 
-  return (
-    <>
-      <EventDetail ticketTypes={ticketTypesData} tickets={ticketsData} />
-    </>
+  return ticketTypesData === undefined || ticketOrdersData === undefined ? null : (
+    <EventDetail ticketTypes={ticketTypesData} tickets={ticketOrdersData} />
   );
 }
