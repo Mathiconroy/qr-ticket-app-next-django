@@ -65,7 +65,7 @@ class TicketOrderHeaderSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = TicketOrderHeader
-        fields = ['id', 'buyer', 'event', 'created_at', 'tickets', 'qr_svg']
+        fields = ['id', 'buyer', 'event', 'created_at', 'tickets', 'qr_svg', 'is_redeemed']
 
     def get_qr_svg(self, obj):
         dict_to_hash = {

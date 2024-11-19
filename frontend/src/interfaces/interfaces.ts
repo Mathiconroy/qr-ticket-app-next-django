@@ -17,7 +17,9 @@ export interface Event {
 }
 
 export interface TicketOrderDetail {
-  ticket_type_id: number;
+  id: Key;
+  order_header: number;
+  ticket_type: number;
   amount: number;
 }
 
@@ -28,6 +30,7 @@ export interface TicketOrderHeader {
   created_at: string;
   qr_svg: string;
   tickets: TicketOrderDetail[];
+  is_redeemed: boolean;
 }
 
 export interface PaginationResponse<T> {

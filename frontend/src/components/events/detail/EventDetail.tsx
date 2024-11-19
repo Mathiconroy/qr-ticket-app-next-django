@@ -17,8 +17,9 @@ import {
 } from '@/components/ui/table';
 import Link from 'next/link';
 import { useModal } from '@/hooks/modalHooks';
-import { Dialog, DialogContent } from '@/components/ui/dialog';
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { useState } from 'react';
+import { Badge } from '@/components/ui/badge';
 
 export default function EventDetail({
   ticketTypes,
@@ -27,12 +28,48 @@ export default function EventDetail({
   ticketTypes: TicketType[];
   ticketOrders: TicketOrderHeader[];
 }) {
-  const { isOpen, openModal, closeModal } = useModal();
+  const { isOpen, openModal, closeModal, toggleModal } = useModal();
   const [selectedOrder, setSelectedOrder] = useState<TicketOrderHeader>();
+
   return (
     <>
-      <Dialog open={isOpen}>
-        <DialogContent>{selectedOrder !== undefined ? null : null}</DialogContent>
+      <Dialog open={isOpen} onOpenChange={toggleModal}>
+        <DialogContent>
+          <DialogHeader>
+            {selectedOrder !== undefined ? (
+              <div className={'flex flex-col content-center justify-center'}>
+                <DialogTitle>
+                  <div className={'text-2xl font-bold text-center py-3'}>Order Details</div>
+                </DialogTitle>
+                <Table>
+                  <TableHeader>
+                    <TableRow>
+                      <TableHead>Ticket Type</TableHead>
+                      <TableHead>Amount</TableHead>
+                    </TableRow>
+                  </TableHeader>
+                  <TableBody>
+                    {selectedOrder.tickets.map((ticket) => (
+                      <TableRow key={ticket.id}>
+                        <TableCell>
+                          {
+                            ticketTypes.find((ticketType) => ticketType.id === ticket.ticket_type)
+                              ?.name
+                          }
+                        </TableCell>
+                        <TableCell>{ticket.amount}</TableCell>
+                      </TableRow>
+                    ))}
+                  </TableBody>
+                </Table>
+                <div
+                  className={'flex justify-center'}
+                  dangerouslySetInnerHTML={{ __html: selectedOrder.qr_svg }}
+                ></div>
+              </div>
+            ) : null}
+          </DialogHeader>
+        </DialogContent>
       </Dialog>
       <Button asChild>
         <Link href={'/app/events'}>
@@ -52,7 +89,7 @@ export default function EventDetail({
               </TableHeader>
               <TableBody>
                 {ticketTypes.map((ticketType) => (
-                  <TableRow>
+                  <TableRow key={ticketType.id}>
                     <TableCell>{ticketType.name}</TableCell>
                     <TableCell>{ticketType.price}</TableCell>
                   </TableRow>
@@ -67,16 +104,22 @@ export default function EventDetail({
             <Table>
               <TableHeader>
                 <TableRow>
+                  <TableHead>Order ID</TableHead>
                   <TableHead>Buyer</TableHead>
                   <TableHead>Bought at</TableHead>
+                  <TableHead>Redeemed</TableHead>
                   <TableHead>Details</TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
                 {ticketOrders.map((ticketOrder) => (
-                  <TableRow>
+                  <TableRow key={ticketOrder.id}>
+                    <TableCell>{ticketOrder.id}</TableCell>
                     <TableCell>{ticketOrder.buyer}</TableCell>
                     <TableCell>{new Date(ticketOrder.created_at).toLocaleString()}</TableCell>
+                    <TableCell>
+                      <Badge>{ticketOrder.is_redeemed ? 'Yes' : 'No'}</Badge>
+                    </TableCell>
                     <TableCell>
                       <Button
                         onClick={() => {
