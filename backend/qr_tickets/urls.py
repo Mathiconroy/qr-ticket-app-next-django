@@ -15,7 +15,7 @@ urlpatterns = [
     path("events/<int:pk>/", EventList.as_view(), name="event-detail"),
     path("events/<int:event_id>/ticketTypes/", TicketTypeList.as_view(), name="ticket-type-list"),
     path("tickets/redeem/<str:qr_key>/", RedeemTicketView.as_view(), name="redeem-ticket"),
-    path("tickets/<int:id>/download", DownloadTicketOrder.as_view(), name="download-ticket"),
+    path("tickets/<int:order_id>/download/", DownloadTicketOrder.as_view(), name="download-ticket"),
 ]
 
 urlpatterns += router.urls
