@@ -20,6 +20,11 @@ import { useModal } from '@/hooks/modalHooks';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { useState } from 'react';
 import { Badge } from '@/components/ui/badge';
+import { downloader } from '@/hooks/fetchHooks';
+
+async function downloadTicket(orderId: TicketOrderHeader['id']) {
+  downloader(`/tickets/${orderId}/download`);
+}
 
 export default function EventDetail({
   ticketTypes,
@@ -66,6 +71,7 @@ export default function EventDetail({
                   className={'flex justify-center'}
                   dangerouslySetInnerHTML={{ __html: selectedOrder.qr_svg }}
                 ></div>
+                <Button onClick={() => downloadTicket(selectedOrder.id)}>Download</Button>
               </div>
             ) : null}
           </DialogHeader>
