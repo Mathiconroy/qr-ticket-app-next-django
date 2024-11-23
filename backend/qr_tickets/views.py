@@ -15,6 +15,8 @@ from django.core.signing import Signer
 import json
 import io
 from django.template.loader import render_to_string
+from django.http import FileResponse
+from weasyprint import HTML
 
 class LoginUser(APIView):
     """
@@ -166,5 +168,10 @@ class CustomAuthToken(ObtainAuthToken):
 class DownloadTicketOrder(APIView):
     def get(self, request, order_id):
         order = TicketOrderHeader.objects.get(pk=order_id)
-        html = render_to_string('qr_tickets/ticket.html', { 'name': 'Math' })
-        print(html)
+        html_string = render_to_string('qr_tickets/ticket.html', { 'name': 'Math' })
+        html = HTML(string=html_string)
+        buffer = io.BytesIO()     
+        pdf_file = html.write_pdf()
+        buffer.write(pdf_file)
+        buffer.seek(0)
+        return FileResponse(buffer, filename='ticket.pdf')
