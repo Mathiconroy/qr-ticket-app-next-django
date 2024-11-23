@@ -1,5 +1,5 @@
 from django.urls import path
-from qr_tickets.views import LoginUser, WhoAmI, EventList, CustomAuthToken, TicketTypeList, TicketOrderViewSet, RedeemTicketView
+from qr_tickets.views import LoginUser, WhoAmI, EventList, CustomAuthToken, TicketTypeList, TicketOrderViewSet, RedeemTicketView, DownloadTicketOrder
 from rest_framework.routers import SimpleRouter
 from rest_framework.authtoken import views
 
@@ -15,6 +15,7 @@ urlpatterns = [
     path("events/<int:pk>/", EventList.as_view(), name="event-detail"),
     path("events/<int:event_id>/ticketTypes/", TicketTypeList.as_view(), name="ticket-type-list"),
     path("tickets/redeem/<str:qr_key>/", RedeemTicketView.as_view(), name="redeem-ticket"),
+    path("tickets/<int:id>/download", DownloadTicketOrder.as_view(), name="download-ticket"),
 ]
 
 urlpatterns += router.urls

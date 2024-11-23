@@ -14,7 +14,7 @@ from rest_framework.parsers import JSONParser
 from django.core.signing import Signer
 import json
 import io
-
+from django.template.loader import render_to_string
 
 class LoginUser(APIView):
     """
@@ -161,3 +161,10 @@ class CustomAuthToken(ObtainAuthToken):
         })
         response.set_cookie('token', token.key)
         return response
+
+
+class DownloadTicketOrder(APIView):
+    def get(self, request, order_id):
+        order = TicketOrderHeader.objects.get(pk=order_id)
+        html = render_to_string('qr_tickets/ticket.html', { 'name': 'Math' })
+        print(html)
