@@ -168,7 +168,9 @@ class CustomAuthToken(ObtainAuthToken):
 class DownloadTicketOrder(APIView):
     def get(self, request, order_id):
         order = TicketOrderHeader.objects.get(pk=order_id)
-        html_string = render_to_string('qr_tickets/ticket.html', { 'name': 'Math' })
+        order_serializer = TicketOrderHeaderSerializer(order)
+        event_serializer = EventSerializer(order.event)
+        html_string = render_to_string('qr_tickets/ticket.html', { 'event': event_serializer.data, 'order': order_serializer.data })
         html = HTML(string=html_string)
         buffer = io.BytesIO()     
         pdf_file = html.write_pdf()

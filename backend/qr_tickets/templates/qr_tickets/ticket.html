@@ -1,3 +1,6 @@
-<div>
-    Hello, {{ name }}!
+<div style="display: flex; flex-direction: column;">
+    <span>Ticket order for {{ event.name }} at {{ event.scheduled_datetime }}</span>
+    {% autoescape off %}
+        Ticket: {{ order.qr_svg }}
+    {% endautoescape %}
 </div>
