@@ -1,6 +1,12 @@
 <div style="display: flex; flex-direction: column;">
-    <span>Ticket order for {{ event.name }} at {{ event.scheduled_datetime }}</span>
-    {% autoescape off %}
-        Ticket: {{ order.qr_svg }}
-    {% endautoescape %}
+    <span>Ticket order {{ order.id }} for {{ event.name }} at {{ event.scheduled_datetime }}</span>
+    <span>Bought by: {{ order.buyer }} at {{ order.created_at }}</span>
+    <div>
+        Ticket:
+    </div>
+    <div>
+        {% autoescape off %}
+            {{ order.qr_svg }}
+        {% endautoescape %}
+    </div>
 </div>
