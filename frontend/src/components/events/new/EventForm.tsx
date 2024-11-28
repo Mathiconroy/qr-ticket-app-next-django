@@ -9,6 +9,10 @@ import axios from 'axios';
 import useSWR, { Fetcher } from 'swr';
 import { Event } from '@/interfaces/interfaces';
 import { DatePicker } from '@/components/ui/datepicker';
+import { Textarea } from '@/components/ui/textarea';
+import { Button } from '@/components/ui/button';
+import { useForm } from 'react-hook-form';
+import { Form } from '@/components/ui/form';
 
 // TODO: This should probably be moved because I'll definitely use this elsewhere lol.
 // This enum serves to give the classes to be used for each type of message.
@@ -62,6 +66,8 @@ export default function EventForm({
     fetcher
   );
 
+  const form = useForm();
+
   async function handleSubmit(e: FormEvent) {
     e.preventDefault();
     const form = document.querySelector('#eventForm') as HTMLFormElement;
@@ -90,9 +96,8 @@ export default function EventForm({
     }
   }
 
-  // TODO: Figure out what the fuck to do with the dates.
   return (
-    <div>
+    <Form {...form}>
       {messageObject !== null ? <Messages messageObject={messageObject}></Messages> : null}
       <form id="eventForm" onSubmit={(e) => handleSubmit(e)}>
         <Label htmlFor={'name'}>Name</Label>
@@ -103,19 +108,16 @@ export default function EventForm({
           value={data !== undefined ? data.name : undefined}
         />
         <Label htmlFor={'scheduled_date'}>Date</Label>
-        <DatePicker name="scheduled_datetime" value={'1995-12-17'} />
-        <Label htmlFor={''}></Label>
-        <Input
-          type="time"
-          label="Time"
-          id="scheduled_datetime"
-          name="scheduled_datetime"
-          value={'15:24'}
-        />
-        <Input id="description" label="Description" name="description" isTextarea={true} />
-        <FormButton text="Create event" className={'mt-4'} type={'submit'} />
+        <Input type={'date'} />
+        <Label htmlFor={'scheduled_time'}>Time</Label>
+        <Input type="time" id="scheduled_time" name="scheduled_time" />
+        <Label htmlFor={'description'}>Description</Label>
+        <Textarea id="description" name="description" />
+        <Button className={'mt-4'} type={'submit'}>
+          Submit
+        </Button>
       </form>
-    </div>
+    </Form>
   );
 }
 
