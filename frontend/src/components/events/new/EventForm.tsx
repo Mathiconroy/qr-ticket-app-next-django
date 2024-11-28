@@ -1,12 +1,14 @@
 'use client';
 
 import { FormEvent, useState } from 'react';
-import axiosInstance from '@/app/axiosInstance';
-import FormInput from '@/app/components/input/textInput';
-import FormButton from '@/app/components/input/button';
+import axiosInstance from '@/axiosInstance';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import FormButton from '@/components/input/button/FormButton';
 import axios from 'axios';
 import useSWR, { Fetcher } from 'swr';
-import { Event } from '@/app/interfaces/interfaces';
+import { Event } from '@/interfaces/interfaces';
+import { DatePicker } from '@/components/ui/datepicker';
 
 // TODO: This should probably be moved because I'll definitely use this elsewhere lol.
 // This enum serves to give the classes to be used for each type of message.
@@ -14,7 +16,7 @@ enum MessageTypes {
   Error = 'border-red-500 bg-red-200 text-red-800',
   Warning = 'border-yellow-500 bg-yellow-200 text-yellow-800',
   Success = 'border-green-500 bg-green-200 text-green-800',
-  Info = 'border-sky-500 bg-sky-200 text-sky-800',
+  Info = 'border-sky-500 bg-sky-200 text-sky-800'
 }
 
 interface Message {
@@ -44,7 +46,7 @@ interface MessageObject {
 
 export default function EventForm({
   mode,
-  eventId,
+  eventId
 }: {
   mode: 'edit' | 'create';
   eventId?: number;
@@ -57,7 +59,7 @@ export default function EventForm({
   };
   const { data } = useSWR<Event>(
     mode === 'edit' && eventId !== undefined ? `events/${eventId}/` : null,
-    fetcher,
+    fetcher
   );
 
   async function handleSubmit(e: FormEvent) {
@@ -69,20 +71,20 @@ export default function EventForm({
         const { data } = await axiosInstance.post(`events/`, formData);
         setMessageObject({
           message: 'Event edited successfully.',
-          messageType: MessageTypes.Success,
+          messageType: MessageTypes.Success
         });
       } else if (mode === 'edit' && eventId !== undefined) {
         const { data } = await axiosInstance.patch(`events/${eventId}/`, formData);
         setMessageObject({
           message: 'Event created successfully.',
-          messageType: MessageTypes.Success,
+          messageType: MessageTypes.Success
         });
       }
     } catch (error) {
       if (axios.isAxiosError(error)) {
         setMessageObject({
           messages: error.response?.data,
-          messageType: MessageTypes.Error,
+          messageType: MessageTypes.Error
         });
       }
     }
@@ -93,28 +95,24 @@ export default function EventForm({
     <div>
       {messageObject !== null ? <Messages messageObject={messageObject}></Messages> : null}
       <form id="eventForm" onSubmit={(e) => handleSubmit(e)}>
-        <FormInput
+        <Label htmlFor={'name'}>Name</Label>
+        <Input
           type="text"
           id="name"
-          label="Name"
           name="name"
           value={data !== undefined ? data.name : undefined}
         />
-        <FormInput
-          type="date"
-          label="Date"
-          id="scheduled_datetime"
-          name="scheduled_datetime"
-          value={'1995-12-17'}
-        />
-        <FormInput
+        <Label htmlFor={'scheduled_date'}>Date</Label>
+        <DatePicker name="scheduled_datetime" value={'1995-12-17'} />
+        <Label htmlFor={''}></Label>
+        <Input
           type="time"
           label="Time"
           id="scheduled_datetime"
           name="scheduled_datetime"
           value={'15:24'}
         />
-        <FormInput id="description" label="Description" name="description" isTextarea={true} />
+        <Input id="description" label="Description" name="description" isTextarea={true} />
         <FormButton text="Create event" className={'mt-4'} type={'submit'} />
       </form>
     </div>
