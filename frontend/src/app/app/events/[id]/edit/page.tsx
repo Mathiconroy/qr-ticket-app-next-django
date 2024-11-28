@@ -1,5 +1,5 @@
-import Title from '@/app/components/display/title';
-import EventForm from '@/app/app/events/new/eventForm';
+import Title from '@/components/display/title';
+import EventForm from '@/components/events/new/EventForm';
 
 export default function editEvent({ params }: { params: { id: number } }) {
   return (

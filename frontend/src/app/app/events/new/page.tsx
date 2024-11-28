@@ -1,5 +1,5 @@
-import EventForm from '@/app/app/events/new/eventForm';
-import Title from '@/app/components/display/title';
+import EventForm from '@/components/events/new/EventForm';
+import Title from '@/components/display/title';
 
 export default function newEvent() {
   return (
