@@ -1,7 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
-import axiosInstance from '../axiosInstance';
+import { useUser } from '@/hooks/fetchHooks';
 
 interface UserData {
   username: string;
@@ -9,16 +8,7 @@ interface UserData {
 }
 
 export default function UserInfoBanner() {
-  const [userData, setUserData] = useState<UserData>();
-
-  useEffect(() => {
-    async function fetchUserData() {
-      const response = await axiosInstance.get('whoami/');
-      setUserData(response.data);
-    }
-
-    fetchUserData();
-  }, []);
+  const { data: userData } = useUser();
 
   return <div>Welcome, {userData !== undefined ? userData.username : null}</div>;
 }

@@ -44,3 +44,7 @@ export function useTicketTypes(id: number) {
 export function useTicketOrders(id: number) {
   return useSWR(`/events/${id}/ticketOrders/`, fetcherJson);
 }
+
+export function useUser() {
+  return useSWR(`/whoami/`, fetcherJson);
+}
