@@ -38,8 +38,6 @@ class LoginUser(APIView):
 
 
 class WhoAmI(APIView):
-    permission_classes = []
-
     def get(self, request):
         return Response({
             "username": request.user.username,
@@ -72,7 +70,7 @@ class EventList(mixins.ListModelMixin, mixins.CreateModelMixin, mixins.UpdateMod
         return self.partial_update(request, *args, **kwargs)
 
     def get_queryset(self):
-        return Event.objects.filter(created_by=self.request.user)
+        return Event.objects.filter(created_by=self.request.user).order_by('id')
 
     def perform_create(self, serializer):
         serializer.save(created_by=self.request.user)
@@ -148,6 +146,9 @@ class RedeemTicketView(APIView):
 
 
 class CustomAuthToken(ObtainAuthToken):
+    permission_classes = []
+    authentication_classes = []
+
     def post(self, request, *args, **kwargs):
         serializer = self.serializer_class(
             data=request.data,
@@ -161,7 +162,6 @@ class CustomAuthToken(ObtainAuthToken):
             'user_id': user.pk,
             'email': user.email
         })
-        response.set_cookie('token', token.key)
         return response
 
 
