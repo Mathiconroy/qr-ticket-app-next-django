@@ -17,8 +17,14 @@ export default function Home() {
   const [whoAmI, setWhoAmI] = useState();
 
   const onSubmit = async (formData: LoginFields) => {
-    const res = await axiosInstance.post('/api-token-auth/', formData);
+    const res = await fetch('/api/api-token-auth/', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(formData)
+    });
     if (res.status >= 200 && res.status <= 299) {
+      const resJson = await res.json();
+      localStorage.setItem('token', resJson.token);
       router.push('/app');
     }
   };
