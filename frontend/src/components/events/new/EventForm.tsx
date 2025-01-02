@@ -89,18 +89,17 @@ export default function EventForm({
   });
 
   async function onSubmit(formData: CreateEventFields) {
-    console.log(formData);
     try {
       if (mode === 'create') {
         const { data } = await axiosInstance.post(`events/`, formData);
         setMessageObject({
-          message: 'Event edited successfully.',
+          message: 'Event created successfully.',
           messageType: MessageTypes.Success
         });
       } else if (mode === 'edit' && eventId !== undefined) {
         const { data } = await axiosInstance.patch(`events/${eventId}/`, formData);
         setMessageObject({
-          message: 'Event created successfully.',
+          message: 'Event edited successfully.',
           messageType: MessageTypes.Success
         });
       }
