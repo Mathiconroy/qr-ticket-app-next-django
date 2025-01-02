@@ -19,6 +19,8 @@ import {
 import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { DateTimePicker } from '@/components/ui/datetimepicker';
+import Link from 'next/link';
+import { MoveLeft } from 'lucide-react';
 
 // TODO: This should probably be moved because I'll definitely use this elsewhere lol.
 // This enum serves to give the classes to be used for each type of message.
@@ -66,23 +68,14 @@ const formSchema: z.ZodType<CreateEventFields> = z.object({
   description: z.string().optional()
 });
 
-export default function EventForm({
-  mode,
-  eventId
-}: {
-  mode: 'edit' | 'create';
-  eventId?: number;
-}) {
+export default function EventForm({ eventId }: { eventId?: number }) {
   const [messageObject, setMessageObject] = useState<MessageObject | null>(null);
 
   const fetcher: Fetcher<Event, string> = async (url: string) => {
     const response = await axiosInstance.get(url);
     return response.data;
   };
-  const { data } = useSWR<Event>(
-    mode === 'edit' && eventId !== undefined ? `events/${eventId}/` : null,
-    fetcher
-  );
+  const { data } = useSWR<Event>(eventId !== undefined ? `events/${eventId}/` : null, fetcher);
 
   const form = useForm<CreateEventFields>({
     resolver: zodResolver(formSchema),
@@ -96,13 +89,13 @@ export default function EventForm({
 
   async function onSubmit(formData: CreateEventFields) {
     try {
-      if (mode === 'create') {
+      if (eventId !== undefined) {
         const { data } = await axiosInstance.post(`events/`, formData);
         setMessageObject({
           message: 'Event created successfully.',
           messageType: MessageTypes.Success
         });
-      } else if (mode === 'edit' && eventId !== undefined) {
+      } else {
         const { data } = await axiosInstance.patch(`events/${eventId}/`, formData);
         setMessageObject({
           message: 'Event edited successfully.',
@@ -121,6 +114,11 @@ export default function EventForm({
 
   return (
     <Form {...form}>
+      <Button asChild>
+        <Link href={'/app/events'}>
+          <MoveLeft /> Go back
+        </Link>
+      </Button>
       {messageObject !== null ? <Messages messageObject={messageObject}></Messages> : null}
       <form onSubmit={form.handleSubmit(onSubmit)}>
         <FormField
