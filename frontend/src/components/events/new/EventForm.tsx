@@ -85,7 +85,13 @@ export default function EventForm({
   );
 
   const form = useForm<CreateEventFields>({
-    resolver: zodResolver(formSchema)
+    resolver: zodResolver(formSchema),
+    defaultValues: {
+      name: data?.name ?? '',
+      scheduled_datetime:
+        data?.scheduled_datetime !== undefined ? new Date(data.scheduled_datetime) : undefined,
+      description: data?.description ?? ''
+    }
   });
 
   async function onSubmit(formData: CreateEventFields) {
