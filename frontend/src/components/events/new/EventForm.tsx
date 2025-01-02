@@ -1,18 +1,24 @@
 'use client';
 
-import { FormEvent, useState } from 'react';
+import { useState } from 'react';
 import axiosInstance from '@/axiosInstance';
 import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import FormButton from '@/components/input/button/FormButton';
 import axios from 'axios';
 import useSWR, { Fetcher } from 'swr';
 import { Event } from '@/interfaces/interfaces';
-import { DatePicker } from '@/components/ui/datepicker';
-import { Textarea } from '@/components/ui/textarea';
 import { Button } from '@/components/ui/button';
 import { useForm } from 'react-hook-form';
-import { Form } from '@/components/ui/form';
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage
+} from '@/components/ui/form';
+import { z } from 'zod';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { DateTimePicker } from '@/components/ui/datetimepicker';
 
 // TODO: This should probably be moved because I'll definitely use this elsewhere lol.
 // This enum serves to give the classes to be used for each type of message.
@@ -48,6 +54,18 @@ interface MessageObject {
   messageType: MessageTypes;
 }
 
+interface CreateEventFields {
+  name: string;
+  scheduled_datetime: Date;
+  description?: string;
+}
+
+const formSchema: z.ZodType<CreateEventFields> = z.object({
+  name: z.string(),
+  scheduled_datetime: z.date(),
+  description: z.string().optional()
+});
+
 export default function EventForm({
   mode,
   eventId
@@ -66,12 +84,12 @@ export default function EventForm({
     fetcher
   );
 
-  const form = useForm();
+  const form = useForm<CreateEventFields>({
+    resolver: zodResolver(formSchema)
+  });
 
-  async function handleSubmit(e: FormEvent) {
-    e.preventDefault();
-    const form = document.querySelector('#eventForm') as HTMLFormElement;
-    const formData = new FormData(form);
+  async function onSubmit(formData: CreateEventFields) {
+    console.log(formData);
     try {
       if (mode === 'create') {
         const { data } = await axiosInstance.post(`events/`, formData);
@@ -99,20 +117,46 @@ export default function EventForm({
   return (
     <Form {...form}>
       {messageObject !== null ? <Messages messageObject={messageObject}></Messages> : null}
-      <form id="eventForm" onSubmit={(e) => handleSubmit(e)}>
-        <Label htmlFor={'name'}>Name</Label>
-        <Input
-          type="text"
-          id="name"
-          name="name"
-          value={data !== undefined ? data.name : undefined}
+      <form onSubmit={form.handleSubmit(onSubmit)}>
+        <FormField
+          control={form.control}
+          name={'name'}
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Name</FormLabel>
+              <FormControl>
+                <Input placeholder={'Name'} {...field} />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
         />
-        <Label htmlFor={'scheduled_date'}>Date</Label>
-        <Input type={'date'} />
-        <Label htmlFor={'scheduled_time'}>Time</Label>
-        <Input type="time" id="scheduled_time" name="scheduled_time" />
-        <Label htmlFor={'description'}>Description</Label>
-        <Textarea id="description" name="description" />
+        <FormField
+          control={form.control}
+          name={'scheduled_datetime'}
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Date</FormLabel>
+              <FormControl>
+                <DateTimePicker value={field.value} onChange={field.onChange} />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        <FormField
+          control={form.control}
+          name={'description'}
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Description</FormLabel>
+              <FormControl>
+                <Input placeholder={'Description'} {...field} />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
         <Button className={'mt-4'} type={'submit'}>
           Submit
         </Button>
