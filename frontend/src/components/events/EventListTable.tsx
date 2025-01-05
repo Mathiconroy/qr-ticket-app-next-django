@@ -138,7 +138,11 @@ export default function EventListTable() {
                 </Button>
               </td>
               <td>
-                <IconButton icon={<BsTicket />} />
+                <Button variant={'ghost'} asChild>
+                  <Link href={`/app/events/${event.id}/ticketTypes/new`}>
+                    <BsTicket />
+                  </Link>
+                </Button>
               </td>
               <td>
                 <IconButton icon={<BsReceipt />} />
