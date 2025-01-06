@@ -1,7 +1,6 @@
-import Card from '@/app/components/display/card';
-import TicketsForm from '@/app/app/events/[id]/tickets/ticketsForm';
-import Title from '@/app/components/display/title';
-import TicketDashboard from '@/app/app/events/[id]/tickets/ticketsDashboard';
+import TicketsForm from '@/app/app/events/[id]/ticketOrders/ticketsForm';
+import Title from '@/components/display/title';
+import TicketDashboard from '@/app/app/events/[id]/ticketOrders/ticketsDashboard';
 
 export default function TicketGenerator({ params }: { params: { id: number } }) {
   return (

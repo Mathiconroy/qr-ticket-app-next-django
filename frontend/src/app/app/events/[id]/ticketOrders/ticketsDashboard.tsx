@@ -1,10 +1,10 @@
 'use client';
 
 import useSWR, { Fetcher } from 'swr';
-import axiosInstance from '@/app/axiosInstance';
-import CardGrid from '@/app/components/display/cardGrid';
-import Card from '@/app/components/display/card';
-import { TicketOrderHeader } from '@/app/interfaces/interfaces';
+import axiosInstance from '@/axiosInstance';
+import CardGrid from '@/components/display/cardGrid';
+import Card from '@/components/display/card';
+import { TicketOrderHeader } from '@/interfaces/interfaces';
 
 export default function TicketDashboard({ eventId }: { eventId: number }) {
   const fetcher: Fetcher<TicketOrderHeader[], string> = async (url: string) => {

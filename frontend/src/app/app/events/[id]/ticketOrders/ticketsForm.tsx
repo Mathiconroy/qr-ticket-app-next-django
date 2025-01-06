@@ -1,28 +1,22 @@
 'use client';
-import FormInput from '@/app/components/input/textInput';
-import FormButton from '@/app/components/input/button';
-import { FormEvent, useEffect, useState } from 'react';
-import axiosInstance from '@/app/axiosInstance';
-import { TicketOrderDetail, TicketType } from '@/app/interfaces/interfaces';
-import Card from '@/app/components/display/card';
+
+import FormInput from '@/components/input/textInput';
+import axiosInstance from '@/axiosInstance';
+import { TicketOrderDetail, TicketType } from '@/interfaces/interfaces';
+import Card from '@/components/display/card';
+import { Button } from '@/components/ui/button';
+import { useTicketTypes } from '@/hooks/fetchHooks';
+import { useForm } from 'react-hook-form';
+import { Form } from '@/components/ui/form';
 
 export default function TicketsForm({ eventId }: { eventId: number }) {
-  const [ticketTypeData, setTicketTypeData] = useState<TicketType[]>();
-  useEffect(() => {
-    async function fetchTicketTypeData() {
-      const eventResponse = await axiosInstance.get(`events/${eventId}/ticketTypes/`);
-      setTicketTypeData(eventResponse.data);
-    }
-    fetchTicketTypeData();
-  }, [eventId]);
+  const { data: ticketTypeData } = useTicketTypes(eventId);
+  const form = useForm();
+  const onSubmit = async (formData) => {};
+
   return (
-    <div>
-      <form
-        id="ticketsForm"
-        onSubmit={(e: FormEvent<HTMLFormElement>): void => {
-          handleFormSubmit(e, eventId);
-        }}
-      >
+    <Form {...form}>
+      <form onSubmit={form.handleSubmit(onSubmit)}>
         <div className={'mb-2 grid grid-cols-3 grid-rows-1'}>
           <div></div>
           <Card>
@@ -46,9 +40,9 @@ export default function TicketsForm({ eventId }: { eventId: number }) {
               </div>
             ))
           : ''}
-        <FormButton text={'Generate tickets'} type={'submit'} />
+        <Button type={'submit'}>Generate Tickets</Button>
       </form>
-    </div>
+    </Form>
   );
 }
 
@@ -60,8 +54,8 @@ function handleFormSubmit(e: FormEvent<HTMLFormElement>, eventId: number): void 
   for (const pair of formData.entries()) {
     if (pair[0] !== 'buyer') {
       tickets.push({
-        ticket_type_id: Number(pair[0]),
-        amount: Number(pair[1]),
+        ticket_type: Number(pair[0]),
+        amount: Number(pair[1])
       });
     }
   }
