@@ -1,5 +1,5 @@
 import Title from '@/components/display/title';
-import TicketTypeForm from '@/app/app/events/[id]/ticketTypeForm';
+import TicketTypeForm from '@/components/events/ticketTypes/TicketTypeForm';
 
 export default function newTicketType({ params }: { params: { id: number } }) {
   return (

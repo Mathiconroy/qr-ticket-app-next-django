@@ -19,6 +19,22 @@ export const fetcherJson = async (url: string): Promise<any> => {
   return await res.json();
 };
 
+export const post = async <T>(url: string, body: any): Promise<T> => {
+  const baseUrl = '/api';
+  const fetchUrl = `${baseUrl}${url}`;
+  const token = localStorage.getItem('token');
+  const authorizationHeaderValue = token ? `Token ${token}` : '';
+  const res = await fetch(fetchUrl, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: authorizationHeaderValue
+    },
+    body: JSON.stringify(body)
+  });
+  return (await res.json()) as T;
+};
+
 export const downloader = async (url: string): Promise<any> => {
   const res = await fetcher(url);
   const blob = await res.blob();

@@ -1,6 +1,5 @@
 'use client';
 
-import axiosInstance from '@/axiosInstance';
 import { useForm } from 'react-hook-form';
 import {
   Form,
@@ -14,6 +13,7 @@ import { z } from 'zod';
 import { Button } from '@/components/ui/button';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Input } from '@/components/ui/input';
+import { post } from '@/hooks/fetchHooks';
 
 interface TicketTypeFields {
   event: number;
@@ -22,9 +22,9 @@ interface TicketTypeFields {
 }
 
 const schema: z.ZodType<TicketTypeFields> = z.object({
-  event: z.number(),
+  event: z.coerce.number(),
   name: z.string(),
-  price: z.coerce.number().min(0)
+  price: z.coerce.number().min(1)
 });
 
 export default function TicketTypeForm({ event_id }: { event_id: number }) {
@@ -36,7 +36,7 @@ export default function TicketTypeForm({ event_id }: { event_id: number }) {
   });
 
   async function onSubmit(formData: TicketTypeFields) {
-    axiosInstance.post(`events/${formData.event}/ticketTypes/`, formData);
+    await post(`/events/${formData.event}/ticketTypes/`, formData);
   }
 
   return (
