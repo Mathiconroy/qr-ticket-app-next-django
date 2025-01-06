@@ -12,6 +12,7 @@ from qr_tickets.serializers import EventSerializer, TicketTypeSerializer, Ticket
     TicketOrderDetailSerializer
 from rest_framework.parsers import JSONParser
 from django.core.signing import Signer
+from rest_framework.generics import ListCreateAPIView, RetrieveUpdateDestroyAPIView
 import json
 import io
 from django.template.loader import render_to_string
@@ -76,19 +77,21 @@ class EventList(mixins.ListModelMixin, mixins.CreateModelMixin, mixins.UpdateMod
         serializer.save(created_by=self.request.user)
 
 
-class TicketTypeList(APIView):
+class TicketTypeList(ListCreateAPIView, RetrieveUpdateDestroyAPIView):
+    serializer_class = TicketTypeSerializer
+
     def get(self, request, event_id):
-        ticket_types = TicketTypeSerializer(
-            [ticketType for ticketType in TicketType.objects.filter(event_id=event_id, event__created_by=request.user)],
-            many=True
-        )
+        queryset = self.get_queryset()
+        ticket_types = TicketTypeSerializer(queryset, many=True)
         return Response(ticket_types.data)
 
     def post(self, request, event_id):
-        data = request.POST.copy()
-        data['event_id'] = event_id
-        TicketTypeSerializer().create(data)
+        request.data['event_id'] = event_id
+        TicketTypeSerializer().create(request.data)
         return Response({'msg': 'success'}, status=status.HTTP_201_CREATED)
+    
+    def get_queryset(self):
+        return TicketType.objects.filter(event_id=self.kwargs['event_id'])
 
 
 # TODO: This.
