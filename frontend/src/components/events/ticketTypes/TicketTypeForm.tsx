@@ -19,12 +19,14 @@ interface TicketTypeFields {
   event: number;
   name: string;
   price: number;
+  max_quantity: number;
 }
 
 const schema: z.ZodType<TicketTypeFields> = z.object({
   event: z.coerce.number(),
   name: z.string(),
-  price: z.coerce.number().min(1)
+  price: z.coerce.number().min(1),
+  max_quantity: z.coerce.number().min(1)
 });
 
 export default function TicketTypeForm({ event_id }: { event_id: number }) {
@@ -74,6 +76,19 @@ export default function TicketTypeForm({ event_id }: { event_id: number }) {
               <FormLabel>Price</FormLabel>
               <FormControl>
                 <Input type={'number'} placeholder={'Price'} {...field} />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        <FormField
+          control={form.control}
+          name={'max_quantity'}
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Maximum quantity</FormLabel>
+              <FormControl>
+                <Input type={'number'} placeholder={'Maximum quantity'} {...field} />
               </FormControl>
               <FormMessage />
             </FormItem>
