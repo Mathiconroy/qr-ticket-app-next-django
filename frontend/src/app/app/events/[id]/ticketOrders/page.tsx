@@ -2,7 +2,8 @@ import TicketsForm from '@/app/app/events/[id]/ticketOrders/ticketsForm';
 import Title from '@/components/display/title';
 import TicketDashboard from '@/app/app/events/[id]/ticketOrders/ticketsDashboard';
 
-export default function TicketGenerator({ params }: { params: { id: number } }) {
+export default async function TicketGenerator(props: { params: Promise<{ id: number }> }) {
+  const params = await props.params;
   return (
     <div>
       <Title>Generate tickets</Title>

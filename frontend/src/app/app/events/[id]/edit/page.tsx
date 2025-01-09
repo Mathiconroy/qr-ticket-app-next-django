@@ -1,11 +1,12 @@
 import Title from '@/components/display/title';
 import EventForm from '@/components/events/new/EventForm';
 
-export default function editEvent({ params }: { params: { id: number } }) {
+export default async function editEvent(props: { params: Promise<{ id: number }> }) {
+  const params = await props.params;
   return (
     <div>
       <Title>Edit event</Title>
-      <EventForm mode={'edit'} eventId={params.id} />
+      <EventForm eventId={params.id} />
     </div>
   );
 }

@@ -6,7 +6,7 @@ export default function IconButton({
   children,
 }: {
   onClick?: MouseEventHandler<HTMLButtonElement>;
-  icon: React.ReactElement;
+  icon: React.ReactElement<any>;
   children?: React.ReactNode;
 }) {
   return (

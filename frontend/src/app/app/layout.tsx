@@ -8,7 +8,7 @@ interface Module {
   id: number;
   name: string;
   route: string;
-  icon: ReactElement;
+  icon: ReactElement<any>;
 }
 
 interface ModuleObject {
