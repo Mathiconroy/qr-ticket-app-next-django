@@ -1,18 +1,49 @@
 'use client';
 
-import FormInput from '@/components/input/textInput';
-import axiosInstance from '@/axiosInstance';
-import { TicketOrderDetail, TicketType } from '@/interfaces/interfaces';
 import Card from '@/components/display/card';
 import { Button } from '@/components/ui/button';
-import { useTicketTypes } from '@/hooks/fetchHooks';
+import { post, useTicketTypes } from '@/hooks/fetchHooks';
 import { useForm } from 'react-hook-form';
-import { Form } from '@/components/ui/form';
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage
+} from '@/components/ui/form';
+import { Input } from '@/components/ui/input';
+import { z } from 'zod';
+import { zodResolver } from '@hookform/resolvers/zod';
+
+interface Ticket {
+  ticket_type: number;
+  amount: number;
+}
+
+interface TicketOrderFormFields {
+  buyer: string;
+  tickets: Ticket[];
+}
+
+const ticketSchema: z.ZodType<Ticket> = z.object({
+  ticket_type: z.coerce.number(),
+  amount: z.coerce.number()
+});
+
+const schema: z.ZodType<TicketOrderFormFields> = z.object({
+  buyer: z.string(),
+  tickets: z.array(ticketSchema)
+});
 
 export default function TicketsForm({ eventId }: { eventId: number }) {
   const { data: ticketTypeData } = useTicketTypes(eventId);
-  const form = useForm();
-  const onSubmit = async (formData) => {};
+  const form = useForm<TicketOrderFormFields>({
+    resolver: zodResolver(schema)
+  });
+  const onSubmit = async (formData: TicketOrderFormFields) => {
+    await post(`/events/${eventId}/ticketOrders/`, formData);
+  };
 
   return (
     <Form {...form}>
@@ -20,45 +51,59 @@ export default function TicketsForm({ eventId }: { eventId: number }) {
         <div className={'mb-2 grid grid-cols-3 grid-rows-1'}>
           <div></div>
           <Card>
-            <FormInput name={'buyer'} id={'buyer'} label={'Buyer'} />
+            <FormField
+              name={'buyer'}
+              control={form.control}
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Buyer</FormLabel>
+                  <FormControl>
+                    <Input {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
           </Card>
         </div>
-        {ticketTypeData !== undefined
-          ? ticketTypeData.map((ticketType: TicketType) => (
-              <div key={ticketType.id} className={'mb-2 grid grid-cols-3 grid-rows-1'}>
-                <div></div>
-                <Card>
-                  <div className={'grid grid-cols-2 grid-rows-1'}>
-                    <label>{`${ticketType.name} - $${ticketType.price}`}</label>
-                    <input
-                      type={'number'}
-                      name={String(ticketType.id)}
-                      className={'rounded-lg border px-2'}
-                    />
-                  </div>
-                </Card>
+        {ticketTypeData?.map((ticketType, index) => (
+          <div key={ticketType.id} className={'mb-2 grid grid-cols-3 grid-rows-1'}>
+            <FormField
+              name={`tickets.${index}.ticket_type`}
+              control={form.control}
+              defaultValue={ticketType.id}
+              render={({ field }) => (
+                <FormItem>
+                  <FormControl>
+                    <Input type={'hidden'} {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <Card>
+              <div className={'grid grid-cols-2 grid-rows-1'}>
+                <FormField
+                  name={`tickets.${index}.amount`}
+                  control={form.control}
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>
+                        {ticketType.name} - ${ticketType.price}
+                      </FormLabel>
+                      <FormControl>
+                        <Input type={'number'} {...field} />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
               </div>
-            ))
-          : ''}
+            </Card>
+          </div>
+        ))}
         <Button type={'submit'}>Generate Tickets</Button>
       </form>
     </Form>
   );
-}
-
-function handleFormSubmit(e: FormEvent<HTMLFormElement>, eventId: number): void {
-  e.preventDefault();
-  const form = document.querySelector('#ticketsForm') as HTMLFormElement;
-  const formData: FormData = new FormData(form);
-  let tickets: TicketOrderDetail[] = [];
-  for (const pair of formData.entries()) {
-    if (pair[0] !== 'buyer') {
-      tickets.push({
-        ticket_type: Number(pair[0]),
-        amount: Number(pair[1])
-      });
-    }
-  }
-  formData.set('tickets', JSON.stringify(tickets));
-  axiosInstance.post(`/events/${eventId}/tickets/`, formData);
 }
