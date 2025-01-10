@@ -1,9 +1,7 @@
 from django.urls import path
 from qr_tickets.views import LoginUser, WhoAmI, EventList, CustomAuthToken, TicketTypeList, TicketOrderViewSet, RedeemTicketView, DownloadTicketOrder
 from rest_framework.routers import SimpleRouter
-from rest_framework.authtoken import views
 
-# TODO: Figure out how this works.
 router = SimpleRouter()
 router.register(r'events/(?P<event_id>[0-9]+)/ticketOrders', TicketOrderViewSet, 'ticket_order')
 

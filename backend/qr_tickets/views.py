@@ -8,12 +8,9 @@ from django.contrib.auth import authenticate, login
 from rest_framework import mixins, viewsets, status
 from rest_framework import generics
 from qr_tickets.models import Event, TicketType, TicketOrderHeader
-from qr_tickets.serializers import EventSerializer, TicketTypeSerializer, TicketOrderHeaderSerializer, \
-    TicketOrderDetailSerializer
-from rest_framework.parsers import JSONParser
+from qr_tickets.serializers import EventSerializer, TicketTypeSerializer, TicketOrderHeaderSerializer
 from django.core.signing import Signer
 from rest_framework.generics import ListCreateAPIView, RetrieveUpdateDestroyAPIView
-import json
 import io
 from django.template.loader import render_to_string
 from django.http import FileResponse
@@ -51,7 +48,6 @@ class MyCustomPagination(PageNumberPagination):
     page_size_query_param = 'page_size'
     max_page_size = 10
 
-# TODO: Pagination.
 class EventList(mixins.ListModelMixin, mixins.CreateModelMixin, mixins.UpdateModelMixin, mixins.RetrieveModelMixin, generics.GenericAPIView):
     serializer_class = EventSerializer
     pagination_class = MyCustomPagination
@@ -94,7 +90,6 @@ class TicketTypeList(ListCreateAPIView, RetrieveUpdateDestroyAPIView):
         return TicketType.objects.filter(event_id=self.kwargs['event_id'])
 
 
-# TODO: This.
 class TicketOrderViewSet(viewsets.ViewSet):
     def list(self, request, event_id):
         queryset = TicketOrderHeader.objects.filter(event__id=event_id)
