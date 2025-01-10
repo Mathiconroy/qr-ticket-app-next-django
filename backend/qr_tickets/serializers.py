@@ -88,7 +88,6 @@ class TicketOrderHeaderSerializer(serializers.ModelSerializer):
         return qrcode.svg_inline(scale=3)
 
     def create(self, validated_data):
-        # TODO: Probably delete this later or change the value stored in qr_hash.
         signer = Signer()
         dict_to_sign = {
             'event': validated_data['event_id'],

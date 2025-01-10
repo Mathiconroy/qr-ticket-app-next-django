@@ -101,13 +101,9 @@ class TicketOrderViewSet(viewsets.ViewSet):
         serializer = TicketOrderHeaderSerializer(queryset, many=True)
         return Response(serializer.data)
 
-    # TODO: Figure this out.
     def create(self, request, event_id):
-        query_dict = request.POST.copy()
-        query_dict['event_id'] = event_id
-        stream = io.StringIO(query_dict['tickets'])
-        query_dict['tickets'] = json.load(stream)
-        TicketOrderHeaderSerializer(context={'request': request}).create(query_dict)
+        request.data['event_id'] = event_id
+        TicketOrderHeaderSerializer(context={'request': request}).create(request.data)
         return Response({'message': 'Ticket order created successfully!'})
 
     def retrieve(self, request, event_id, order_header_id):

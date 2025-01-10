@@ -17,7 +17,7 @@ import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
 
 interface Ticket {
-  ticket_type: number;
+  ticket_type_id: number;
   amount: number;
 }
 
@@ -27,7 +27,7 @@ interface TicketOrderFormFields {
 }
 
 const ticketSchema: z.ZodType<Ticket> = z.object({
-  ticket_type: z.coerce.number(),
+  ticket_type_id: z.coerce.number(),
   amount: z.coerce.number()
 });
 
@@ -41,6 +41,7 @@ export default function TicketsForm({ eventId }: { eventId: number }) {
   const form = useForm<TicketOrderFormFields>({
     resolver: zodResolver(schema)
   });
+  // TODO: Fix the endpoint
   const onSubmit = async (formData: TicketOrderFormFields) => {
     await post(`/events/${eventId}/ticketOrders/`, formData);
   };
@@ -69,7 +70,7 @@ export default function TicketsForm({ eventId }: { eventId: number }) {
         {ticketTypeData?.map((ticketType, index) => (
           <div key={ticketType.id} className={'mb-2 grid grid-cols-3 grid-rows-1'}>
             <FormField
-              name={`tickets.${index}.ticket_type`}
+              name={`tickets.${index}.ticket_type_id`}
               control={form.control}
               defaultValue={ticketType.id}
               render={({ field }) => (
