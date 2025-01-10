@@ -25,7 +25,7 @@ class Event(models.Model):
     edited_at = models.DateTimeField(auto_now=True)
 
     def __str__(self):
-        return f'{self.id} - {self.name}'
+        return f"{self.id} - {self.name}"
 
 
 class TicketType(models.Model):
@@ -35,7 +35,7 @@ class TicketType(models.Model):
     max_quantity = models.IntegerField(null=True)
 
     def __str__(self):
-        return f'{self.id} - {self.name}'
+        return f"{self.id} - {self.name}"
 
 
 # TODO: Actually think this through, you're basically storing passwords in plaintext lol.
@@ -54,19 +54,18 @@ class TicketOrderHeader(models.Model):
     is_redeemed = models.BooleanField(default=False)
 
     def __str__(self):
-        return f'{self.id} - {self.event.name} bought by {self.buyer}'
+        return f"{self.id} - {self.event.name} bought by {self.buyer}"
 
 
 class TicketOrderDetail(models.Model):
-    order_header = models.ForeignKey(TicketOrderHeader, on_delete=models.CASCADE, related_name='tickets')
+    order_header = models.ForeignKey(
+        TicketOrderHeader, on_delete=models.CASCADE, related_name="tickets"
+    )
     ticket_type = models.ForeignKey(TicketType, on_delete=models.CASCADE)
     amount = models.IntegerField()
 
     def __str__(self):
-        return f'{self.order_header.id} - {self.ticket_type.name} ({self.amount})'
+        return f"{self.order_header.id} - {self.ticket_type.name} ({self.amount})"
 
     def serialize(self):
-        return {
-            'ticket_type': self.ticket_type.id,
-            'amount': self.amount
-        }
+        return {"ticket_type": self.ticket_type.id, "amount": self.amount}

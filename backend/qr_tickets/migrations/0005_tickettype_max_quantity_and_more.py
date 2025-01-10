@@ -5,20 +5,23 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
-        ('qr_tickets', '0004_ticketorderheader_ticketorderdetail_delete_ticket'),
+        ("qr_tickets", "0004_ticketorderheader_ticketorderdetail_delete_ticket"),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='tickettype',
-            name='max_quantity',
+            model_name="tickettype",
+            name="max_quantity",
             field=models.IntegerField(null=True),
         ),
         migrations.AlterField(
-            model_name='ticketorderdetail',
-            name='order_header',
-            field=models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='tickets', to='qr_tickets.ticketorderheader'),
+            model_name="ticketorderdetail",
+            name="order_header",
+            field=models.ForeignKey(
+                on_delete=django.db.models.deletion.CASCADE,
+                related_name="tickets",
+                to="qr_tickets.ticketorderheader",
+            ),
         ),
     ]

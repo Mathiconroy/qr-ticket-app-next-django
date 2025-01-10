@@ -5,31 +5,64 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
-        ('qr_tickets', '0003_rename_bought_by_ticket_owner'),
+        ("qr_tickets", "0003_rename_bought_by_ticket_owner"),
     ]
 
     operations = [
         migrations.CreateModel(
-            name='TicketOrderHeader',
+            name="TicketOrderHeader",
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('buyer', models.CharField(max_length=100)),
-                ('created_at', models.DateTimeField(auto_now_add=True)),
-                ('event', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='qr_tickets.event')),
+                (
+                    "id",
+                    models.BigAutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("buyer", models.CharField(max_length=100)),
+                ("created_at", models.DateTimeField(auto_now_add=True)),
+                (
+                    "event",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        to="qr_tickets.event",
+                    ),
+                ),
             ],
         ),
         migrations.CreateModel(
-            name='TicketOrderDetail',
+            name="TicketOrderDetail",
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('amount', models.IntegerField()),
-                ('ticket_type', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='qr_tickets.tickettype')),
-                ('order_header', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='qr_tickets.ticketorderheader')),
+                (
+                    "id",
+                    models.BigAutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("amount", models.IntegerField()),
+                (
+                    "ticket_type",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        to="qr_tickets.tickettype",
+                    ),
+                ),
+                (
+                    "order_header",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        to="qr_tickets.ticketorderheader",
+                    ),
+                ),
             ],
         ),
         migrations.DeleteModel(
-            name='Ticket',
+            name="Ticket",
         ),
     ]

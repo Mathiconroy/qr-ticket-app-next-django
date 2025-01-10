@@ -4,15 +4,14 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
-        ('qr_tickets', '0006_ticketorderheader_qr_hash'),
+        ("qr_tickets", "0006_ticketorderheader_qr_hash"),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='ticketorderheader',
-            name='is_redeemed',
+            model_name="ticketorderheader",
+            name="is_redeemed",
             field=models.BooleanField(default=False),
         ),
     ]
