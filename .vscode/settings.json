@@ -1,5 +1,13 @@
 {
     "python.linting.enabled": false,
+    "[python]": {
+        "editor.formatOnSave": true,
+        "editor.defaultFormatter": "charliermarsh.ruff",
+        "editor.codeActionsOnSave": {
+            "source.fixAll": "explicit",
+            "source.organizeImports": "explicit"
+        }
+    },
     "[typescript]": {
         "editor.tabSize": 2,
     },
