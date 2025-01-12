@@ -15,6 +15,8 @@ import {
 import { Input } from '@/components/ui/input';
 import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
+import { Minus, Plus } from 'lucide-react';
+import { TicketNumberInput } from '@/components/input/ticketNumberInput';
 
 interface Ticket {
   ticket_type_id: number;
@@ -39,10 +41,13 @@ const schema: z.ZodType<TicketOrderFormFields> = z.object({
 export default function TicketsForm({ eventId }: { eventId: number }) {
   const { data: ticketTypeData } = useTicketTypes(eventId);
   const form = useForm<TicketOrderFormFields>({
-    resolver: zodResolver(schema)
+    resolver: zodResolver(schema),
+    defaultValues: {
+      buyer: ''
+    }
   });
-  // TODO: Fix the endpoint
   const onSubmit = async (formData: TicketOrderFormFields) => {
+    console.log(formData);
     await post(`/events/${eventId}/ticketOrders/`, formData);
   };
 
@@ -67,6 +72,7 @@ export default function TicketsForm({ eventId }: { eventId: number }) {
             />
           </Card>
         </div>
+        {/* TODO: Make this design better. */}
         {ticketTypeData?.map((ticketType, index) => (
           <div key={ticketType.id} className={'mb-2 grid grid-cols-3 grid-rows-1'}>
             <FormField
@@ -83,23 +89,22 @@ export default function TicketsForm({ eventId }: { eventId: number }) {
               )}
             />
             <Card>
-              <div className={'grid grid-cols-2 grid-rows-1'}>
-                <FormField
-                  name={`tickets.${index}.amount`}
-                  control={form.control}
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>
-                        {ticketType.name} - ${ticketType.price}
-                      </FormLabel>
-                      <FormControl>
-                        <Input type={'number'} {...field} />
+              <FormField
+                name={`tickets.${index}.amount`}
+                control={form.control}
+                render={({ field }) => (
+                  <FormItem>
+                    <div className={'flex items-center justify-between gap-4 text-xl'}>
+                      <FormLabel className={'text-xl'}>{ticketType.name}</FormLabel>
+                      <div className={'text-xl'}>${ticketType.price}</div>
+                      <FormControl className={'justify-self-end'}>
+                        <TicketNumberInput {...field} />
                       </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-              </div>
+                    </div>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
             </Card>
           </div>
         ))}
