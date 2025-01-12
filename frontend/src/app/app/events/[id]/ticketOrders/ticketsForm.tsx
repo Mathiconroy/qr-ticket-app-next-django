@@ -15,7 +15,6 @@ import {
 import { Input } from '@/components/ui/input';
 import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { Minus, Plus } from 'lucide-react';
 import { TicketNumberInput } from '@/components/input/ticketNumberInput';
 
 interface Ticket {
@@ -34,7 +33,7 @@ const ticketSchema: z.ZodType<Ticket> = z.object({
 });
 
 const schema: z.ZodType<TicketOrderFormFields> = z.object({
-  buyer: z.string(),
+  buyer: z.string().trim().min(1, 'Required'),
   tickets: z.array(ticketSchema)
 });
 
