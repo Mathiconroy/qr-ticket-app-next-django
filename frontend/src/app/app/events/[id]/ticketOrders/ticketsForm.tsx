@@ -34,7 +34,9 @@ const ticketSchema: z.ZodType<Ticket> = z.object({
 
 const schema: z.ZodType<TicketOrderFormFields> = z.object({
   buyer: z.string().trim().min(1, 'Required'),
-  tickets: z.array(ticketSchema)
+  tickets: z.array(ticketSchema).refine((value) => value.some((ticket) => ticket.amount > 0), {
+    message: 'Empty orders are not allowed'
+  })
 });
 
 export default function TicketsForm({ eventId }: { eventId: number }) {
@@ -46,7 +48,6 @@ export default function TicketsForm({ eventId }: { eventId: number }) {
     }
   });
   const onSubmit = async (formData: TicketOrderFormFields) => {
-    console.log(formData);
     await post(`/events/${eventId}/ticketOrders/`, formData);
   };
 
@@ -71,7 +72,7 @@ export default function TicketsForm({ eventId }: { eventId: number }) {
             />
           </Card>
         </div>
-        {/* TODO: Make this design better. */}
+
         {ticketTypeData?.map((ticketType, index) => (
           <div key={ticketType.id} className={'mb-2 grid grid-cols-3 grid-rows-1'}>
             <FormField
