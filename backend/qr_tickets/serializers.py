@@ -1,13 +1,14 @@
+import math
+from decimal import Decimal
+
+import segno
+from django.conf import settings
 from django.contrib.auth import get_user_model
 from django.core.signing import Signer
-from qr_tickets.models import Event, TicketType, TicketOrderHeader, TicketOrderDetail
 from rest_framework import serializers
 from rest_framework.reverse import reverse
-from django.conf import settings
 
-import math
-import segno
-from decimal import Decimal
+from qr_tickets.models import Event, TicketOrderDetail, TicketOrderHeader, TicketType
 
 
 class RangeValidator:
@@ -83,6 +84,13 @@ class TicketOrderHeaderSerializer(serializers.ModelSerializer):
             "qr_svg",
             "is_redeemed",
         ]
+
+    def validate_tickets(value):
+        ticket_amounts = [ticket.amount > 0 for ticket in value]
+        if True not in ticket_amounts:
+            raise serializers.ValidationError(
+                "An order must have at least one ticket with amount bigger than 0"
+            )
 
     def get_qr_svg(self, obj):
         dict_to_hash = {

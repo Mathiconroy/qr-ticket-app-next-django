@@ -1,24 +1,25 @@
+import io
+
+from django.contrib.auth import authenticate, login
 from django.core import signing
-from rest_framework.authtoken.views import ObtainAuthToken
+from django.core.signing import Signer
+from django.http import FileResponse
+from django.template.loader import render_to_string
+from rest_framework import generics, mixins, status, viewsets
 from rest_framework.authtoken.models import Token
+from rest_framework.authtoken.views import ObtainAuthToken
+from rest_framework.generics import ListCreateAPIView, RetrieveUpdateDestroyAPIView
 from rest_framework.pagination import PageNumberPagination
 from rest_framework.response import Response
 from rest_framework.views import APIView
-from django.contrib.auth import authenticate, login
-from rest_framework import mixins, viewsets, status
-from rest_framework import generics
-from qr_tickets.models import Event, TicketType, TicketOrderHeader
+from weasyprint import HTML
+
+from qr_tickets.models import Event, TicketOrderHeader, TicketType
 from qr_tickets.serializers import (
     EventSerializer,
-    TicketTypeSerializer,
     TicketOrderHeaderSerializer,
+    TicketTypeSerializer,
 )
-from django.core.signing import Signer
-from rest_framework.generics import ListCreateAPIView, RetrieveUpdateDestroyAPIView
-import io
-from django.template.loader import render_to_string
-from django.http import FileResponse
-from weasyprint import HTML
 
 
 class LoginUser(APIView):
