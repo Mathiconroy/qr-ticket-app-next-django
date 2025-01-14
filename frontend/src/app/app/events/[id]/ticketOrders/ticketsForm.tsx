@@ -51,6 +51,8 @@ export default function TicketsForm({ eventId }: { eventId: number }) {
     await post(`/events/${eventId}/ticketOrders/`, formData);
   };
 
+  console.log(form.getValues());
+
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)}>
@@ -92,13 +94,18 @@ export default function TicketsForm({ eventId }: { eventId: number }) {
               <FormField
                 name={`tickets.${index}.amount`}
                 control={form.control}
+                defaultValue={0}
                 render={({ field }) => (
                   <FormItem>
                     <div className={'flex items-center justify-between gap-4 text-xl'}>
                       <FormLabel className={'text-xl'}>{ticketType.name}</FormLabel>
                       <div className={'text-xl'}>${ticketType.price}</div>
                       <FormControl className={'justify-self-end'}>
-                        <TicketNumberInput {...field} />
+                        <TicketNumberInput
+                          onChange={field.onChange}
+                          value={field.value}
+                          ref={field.ref}
+                        />
                       </FormControl>
                     </div>
                     <FormMessage />
