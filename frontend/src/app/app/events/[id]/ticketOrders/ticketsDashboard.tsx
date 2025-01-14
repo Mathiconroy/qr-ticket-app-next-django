@@ -5,13 +5,10 @@ import axiosInstance from '@/axiosInstance';
 import CardGrid from '@/components/display/cardGrid';
 import Card from '@/components/display/card';
 import { TicketOrderHeader } from '@/interfaces/interfaces';
+import { useTicketOrders } from '@/hooks/fetchHooks';
 
 export default function TicketDashboard({ eventId }: { eventId: number }) {
-  const fetcher: Fetcher<TicketOrderHeader[], string> = async (url: string) => {
-    const response = await axiosInstance.get(url);
-    return response.data;
-  };
-  const { data, error, isLoading } = useSWR(`events/${eventId}/tickets/`, fetcher);
+  const { data, error, isLoading } = useTicketOrders(eventId);
 
   if (error) return <div>An error has occurred.</div>;
   if (isLoading) return <div>Loading...</div>;
